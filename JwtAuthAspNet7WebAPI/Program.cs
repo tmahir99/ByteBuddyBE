@@ -75,6 +75,9 @@ builder.Services.AddScoped<ICodeSnippetService, CodeSnippetService>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<ITagService, TagService>();
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

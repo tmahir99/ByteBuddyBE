@@ -7,7 +7,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Interfaces
     {
         Task<TagDto> CreateAsync(TagDto dto);
         Task<TagDto> GetByIdAsync(long id);
-        Task<TagDto> GetAllAsync(TagDto filter);
+        Task<List<string>> GetAllTagNames();
+        Task<List<string>> GetAllTagAreas();
         Task UpdateAsync(long id, TagDto dto);
         Task DeleteAsync(long id);
     }
