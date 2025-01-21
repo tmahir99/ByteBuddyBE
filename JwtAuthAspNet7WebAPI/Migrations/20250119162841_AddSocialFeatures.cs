@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace JwtAuthAspNet7WebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class AddSocialFeatures : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -330,6 +330,40 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UserTags",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CodeSnippetId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTags", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserTags_AspNetUsers_CreatedById",
+                        column: x => x.CreatedById,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserTags_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserTags_CodeSnippets_CodeSnippetId",
+                        column: x => x.CodeSnippetId,
+                        principalTable: "CodeSnippets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Likes",
                 columns: table => new
                 {
@@ -454,6 +488,21 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                 name: "IX_Pages_CreatedById",
                 table: "Pages",
                 column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTags_CodeSnippetId",
+                table: "UserTags",
+                column: "CodeSnippetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTags_CreatedById",
+                table: "UserTags",
+                column: "CreatedById");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserTags_UserId",
+                table: "UserTags",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -490,16 +539,19 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
+                name: "UserTags");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Tags");
 
             migrationBuilder.DropTable(
-                name: "CodeSnippets");
+                name: "Pages");
 
             migrationBuilder.DropTable(
-                name: "Pages");
+                name: "CodeSnippets");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

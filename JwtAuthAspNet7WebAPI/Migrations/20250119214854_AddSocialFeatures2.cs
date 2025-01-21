@@ -5,7 +5,7 @@
 namespace JwtAuthAspNet7WebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class TagMigration : Migration
+    public partial class AddSocialFeatures2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

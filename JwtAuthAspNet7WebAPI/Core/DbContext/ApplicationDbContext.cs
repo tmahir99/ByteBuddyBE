@@ -15,6 +15,7 @@ namespace JwtAuthAspNet7WebAPI.Core.DbContext
         public DbSet<Page> Pages { get; set; }
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<UserTag> UserTags { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -66,7 +67,21 @@ namespace JwtAuthAspNet7WebAPI.Core.DbContext
                 .HasOne(c => c.CodeSnippet)
                 .WithMany(cs => cs.Comments)
                 .HasForeignKey(c => c.CodeSnippetId)
-                .OnDelete(DeleteBehavior.Cascade); // Keep one cascade delete path
+                .OnDelete(DeleteBehavior.Cascade); // Keep one cascade delete 
+
+            // User Tags
+            modelBuilder.Entity<UserTag>()
+                .HasOne(ut => ut.User)
+                .WithMany()
+                .HasForeignKey(ut => ut.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserTag>()
+                .HasOne(ut => ut.CodeSnippet)
+                .WithMany()
+                .HasForeignKey(ut => ut.CodeSnippetId)
+                .OnDelete(DeleteBehavior.Restrict); // Changed from Cascade to Restrict
         }
+
     }
 }

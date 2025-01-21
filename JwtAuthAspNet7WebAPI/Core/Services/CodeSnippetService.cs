@@ -74,16 +74,17 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
 
             var query = BuildFilterQuery(filter);
             var total = await query.CountAsync();
-            
+
             var items = await query
                 .Skip((filter.Page - 1) * filter.PageSize)
                 .Take(filter.PageSize)
-                .Select(cs => MapToDto(cs))
                 .ToListAsync();
+
+            var mappedItems = items.Select(MapToDto).ToList();
 
             return new PaginatedResult<CodeSnippetDto>
             {
-                Items = items,
+                Items = mappedItems,
                 TotalCount = total,
                 PageSize = filter.PageSize,
                 CurrentPage = filter.Page,
@@ -163,8 +164,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             var query = _context.CodeSnippets
                 .Include(cs => cs.Tags)
                 .Include(cs => cs.CreatedBy)
-                .Include(cs => cs.Likes)
-                .Include(cs => cs.Comments)
+                //.Include(cs => cs.Likes)
+                //.Include(cs => cs.Comments)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filter.SearchTerm))
@@ -204,7 +205,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             };
         }
 
-        private CodeSnippetDto MapToDto(CodeSnippet codeSnippet)
+        private static CodeSnippetDto MapToDto(CodeSnippet codeSnippet)
         {
             return new CodeSnippetDto
             {

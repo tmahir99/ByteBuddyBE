@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JwtAuthAspNet7WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250113221516_Init")]
-    partial class Init
+    [Migration("20250119162841_AddSocialFeatures")]
+    partial class AddSocialFeatures
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -339,6 +339,39 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                     b.ToTable("Tags");
                 });
 
+            modelBuilder.Entity("JwtAuthAspNet7WebAPI.Core.Entities.UserTag", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CodeSnippetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedById")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodeSnippetId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserTags");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -587,6 +620,33 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("JwtAuthAspNet7WebAPI.Core.Entities.UserTag", b =>
+                {
+                    b.HasOne("JwtAuthAspNet7WebAPI.Core.Entities.CodeSnippet", "CodeSnippet")
+                        .WithMany()
+                        .HasForeignKey("CodeSnippetId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("JwtAuthAspNet7WebAPI.Core.Entities.ApplicationUser", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JwtAuthAspNet7WebAPI.Core.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CodeSnippet");
+
+                    b.Navigation("CreatedBy");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

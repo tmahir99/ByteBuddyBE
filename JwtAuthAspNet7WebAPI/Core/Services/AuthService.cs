@@ -1,4 +1,5 @@
-﻿using JwtAuthAspNet7WebAPI.Core.Dtos;
+﻿using AutoMapper;
+using JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Entities;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
 using JwtAuthAspNet7WebAPI.Core.OtherObjects;
@@ -17,12 +18,14 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
+        private readonly IMapper _mapper;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
 
         public async Task<AuthServiceResponseDto> LoginAsync(LoginDto loginDto)
@@ -72,7 +75,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             {
                 IsSucceed = true,
                 Message = token,
-                Roles = userRoles.ToList()
+                Roles = userRoles.ToList(),
+                User = _mapper.Map<ApplicationUserDto>(user) 
             };
         }
 

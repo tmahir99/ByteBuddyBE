@@ -1,6 +1,7 @@
 using JwtAuthAspNet7WebAPI.Core.DbContext;
 using JwtAuthAspNet7WebAPI.Core.Entities;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
+using JwtAuthAspNet7WebAPI.Core.Mapper;
 using JwtAuthAspNet7WebAPI.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +77,10 @@ builder.Services.AddScoped<ICodeSnippetService, CodeSnippetService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 builder.Services.AddScoped<ITagService, TagService>();
+
+builder.Services.AddScoped<IFriendshipService, FriendshipService>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 builder.Services.AddEndpointsApiExplorer();

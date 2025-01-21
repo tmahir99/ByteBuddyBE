@@ -59,8 +59,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         // Route -> make guest -> admin
         [HttpPost]
         [Route("make-admin")]
-        [Authorize(Roles = StaticUserRoles.ADMIN)]
-
+        //[Authorize(Roles = StaticUserRoles.ADMIN)]
         public async Task<IActionResult> MakeAdmin([FromBody] UpdatePermissionDto updatePermissionDto)
         {
             var operationResult = await _authService.MakeAdminAsync(updatePermissionDto);
