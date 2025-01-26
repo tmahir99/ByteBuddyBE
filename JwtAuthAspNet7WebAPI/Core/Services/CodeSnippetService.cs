@@ -164,8 +164,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             var query = _context.CodeSnippets
                 .Include(cs => cs.Tags)
                 .Include(cs => cs.CreatedBy)
-                //.Include(cs => cs.Likes)
-                //.Include(cs => cs.Comments)
+                .Include(cs => cs.Likes)
+                .Include(cs => cs.Comments)
                 .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(filter.SearchTerm))

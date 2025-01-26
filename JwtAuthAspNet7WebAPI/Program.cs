@@ -80,6 +80,8 @@ builder.Services.AddScoped<ITagService, TagService>();
 
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 
+builder.Services.AddScoped<ISocialInteractionService, SocialInteractionService>();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
