@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\services\\codesnippetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\services\\codesnippetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\tagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:controllers\\tagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\interfaces\\itagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\interfaces\\itagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\services\\tagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\services\\tagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\services\\codesnippetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\services\\codesnippetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\services\\socialinteractionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\interfaces\\isocialinteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\interfaces\\isocialinteraction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\services\\tagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\services\\tagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\scoialinteractioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -80,10 +92,6 @@
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\dbcontext\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
@@ -118,11 +126,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "TagController.cs",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\TagController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TagController.cs",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\TagController.cs",
+              "RelativeToolTip": "Controllers\\TagController.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAwwEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-29T19:19:12.723Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "socialInteractionService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\socialInteractionService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\socialInteractionService.cs",
@@ -130,25 +151,24 @@
               "RelativeToolTip": "Core\\Services\\socialInteractionService.cs",
               "ViewState": "AgIAAJUAAAAAAAAAAAAuwKIAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-26T15:45:09.292Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-26T15:45:09.292Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAWwFAAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAAGsAAAAAAAAAAAAWwHQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-19T21:41:30.259Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 17,
               "Title": "dbo.AspNetUsers.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.AspNetUsers.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.AspNetUsers.sql",
@@ -157,7 +177,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 21,
               "Title": "dbo.AspNetRoles.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.AspNetRoles.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.AspNetRoles.sql",
@@ -166,7 +186,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 16,
               "Title": "CodeSnippetsController.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\CodeSnippetsController.cs",
               "RelativeDocumentMoniker": "Controllers\\CodeSnippetsController.cs",
@@ -178,20 +198,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "TagService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\TagService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\TagService.cs",
               "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\TagService.cs",
               "RelativeToolTip": "Core\\Services\\TagService.cs",
-              "ViewState": "AgIAAGUAAAAAAAAAAAAuwBkAAABVAAAAAAAAAA==",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAwwEAAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-19T15:40:18.32Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 9,
               "Title": "ScoialInteractionController.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\ScoialInteractionController.cs",
               "RelativeDocumentMoniker": "Controllers\\ScoialInteractionController.cs",
@@ -199,25 +219,50 @@
               "RelativeToolTip": "Controllers\\ScoialInteractionController.cs",
               "ViewState": "AgIAAAkAAAAAAAAAAAAAAAwAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T16:12:10.433Z",
+              "WhenOpened": "2025-01-19T16:12:10.433Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Properties\\launchSettings.json",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAIwCkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-01-19T16:33:41.452Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
+              "Title": "ITagService.cs",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Interfaces\\ITagService.cs",
+              "RelativeDocumentMoniker": "Core\\Interfaces\\ITagService.cs",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Interfaces\\ITagService.cs",
+              "RelativeToolTip": "Core\\Interfaces\\ITagService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-29T19:00:50.826Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "CodeSnippetService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\CodeSnippetService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\CodeSnippetService.cs",
               "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\CodeSnippetService.cs",
               "RelativeToolTip": "Core\\Services\\CodeSnippetService.cs",
-              "ViewState": "AgIAAI0AAAAAAAAAAAA4wKQAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAcwKQAAAAnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-19T20:55:23.64Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 8,
               "Title": "ISocialInteraction.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Interfaces\\ISocialInteraction.cs",
               "RelativeDocumentMoniker": "Core\\Interfaces\\ISocialInteraction.cs",
@@ -225,12 +270,11 @@
               "RelativeToolTip": "Core\\Interfaces\\ISocialInteraction.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T16:11:15.008Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-19T16:11:15.008Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "UserTag.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\UserTag.cs",
               "RelativeDocumentMoniker": "Core\\Entities\\UserTag.cs",
@@ -238,12 +282,11 @@
               "RelativeToolTip": "Core\\Entities\\UserTag.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T16:14:18.122Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-19T16:14:18.122Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 11,
               "Title": "AuthService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\AuthService.cs",
@@ -255,7 +298,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 12,
               "Title": "AuthServiceResponseDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\AuthServiceResponseDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\AuthServiceResponseDto.cs",
@@ -267,7 +310,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 13,
               "Title": "ApplicationUserDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\ApplicationUserDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\ApplicationUserDto.cs",
@@ -279,7 +322,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 14,
               "Title": "CodeSnippetDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\CodeSnippetDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\CodeSnippetDto.cs",
@@ -291,7 +334,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 10,
               "Title": "MapApplicationUser.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Mapper\\MapApplicationUser.cs",
               "RelativeDocumentMoniker": "Core\\Mapper\\MapApplicationUser.cs",
@@ -303,7 +346,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 15,
               "Title": "AuthController.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",
@@ -316,18 +359,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 20,
-              "Title": "launchSettings.json",
-              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Properties\\launchSettings.json",
-              "RelativeDocumentMoniker": "Properties\\launchSettings.json",
-              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Properties\\launchSettings.json",
-              "RelativeToolTip": "Properties\\launchSettings.json",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAIwBoAAABHAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-01-19T16:33:41.452Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
               "Title": "SocialInteractionDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\SocialInteractionDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\SocialInteractionDto.cs",
@@ -339,7 +370,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 18,
               "Title": "dbo.Friendships.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.Friendships.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.Friendships.sql",
@@ -348,7 +379,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 19,
               "Title": "FriendshipService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\FriendshipService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\FriendshipService.cs",
@@ -360,7 +391,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 23,
               "Title": "appsettings.Development.json",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\appsettings.Development.json",
               "RelativeDocumentMoniker": "appsettings.Development.json",
@@ -372,7 +403,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 24,
               "Title": "dbo.UserTags.sql",
               "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.UserTags.sql",
               "ToolTip": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.UserTags.sql",
@@ -381,7 +412,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 25,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "Core\\Entities\\ApplicationUser.cs",
@@ -393,7 +424,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 26,
               "Title": "Message.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\Message.cs",
               "RelativeDocumentMoniker": "Core\\Entities\\Message.cs",
@@ -405,7 +436,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 22,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\DbContext\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Core\\DbContext\\ApplicationDbContext.cs",
@@ -417,7 +448,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 27,
               "Title": "FriendshipController.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\FriendshipController.cs",
               "RelativeDocumentMoniker": "Controllers\\FriendshipController.cs",
@@ -429,7 +460,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 28,
               "Title": "IFriendshipService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Interfaces\\IFriendshipService.cs",
               "RelativeDocumentMoniker": "Core\\Interfaces\\IFriendshipService.cs",
@@ -441,7 +472,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 29,
               "Title": "RegisterDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\RegisterDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\RegisterDto.cs",

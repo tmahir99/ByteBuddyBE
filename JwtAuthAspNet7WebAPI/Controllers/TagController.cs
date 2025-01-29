@@ -61,6 +61,15 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             return Ok(tagNames);
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(List<TagDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllTagsAsync()
+        {
+            var tagNames = await _tagService.GetAllTagsAsync();
+            return Ok(tagNames);
+        }
+
         [HttpGet("areas")]
         [AllowAnonymous]
         [ProducesResponseType(typeof(List<TagDto>), StatusCodes.Status200OK)]

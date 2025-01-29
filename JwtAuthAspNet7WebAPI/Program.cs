@@ -115,21 +115,17 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
-
-
-
-
 // pipeline
 var app = builder.Build();
 
-// Enable CORS
 app.UseCors(options =>
 {
-    options.AllowAnyOrigin();
-    options.AllowAnyHeader();
-    options.AllowAnyMethod();
+    options.WithOrigins("http://localhost:4200")
+           .AllowAnyHeader()
+           .AllowAnyMethod()
+           .AllowCredentials();
 });
+
 
 if (app.Environment.IsDevelopment())
 {

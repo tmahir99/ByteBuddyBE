@@ -53,6 +53,20 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             return tagNames;
         }
 
+        public async Task<List<TagDto>> GetAllTagsAsync()
+        {
+            var tags = await _context.Tags
+                .Select(t => new TagDto
+                {
+                    Id = t.Id,
+                    Name = t.Name,
+                    Area = t.Area
+                })
+                .ToListAsync();
+
+            return tags;
+        }
+
         public async Task<List<string>> GetAllTagAreas()
         {
             var tagAreas = await _context.Tags
