@@ -14,6 +14,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Dtos
         public ApplicationUserDto CreatedBy { get; set; }
         public ICollection<Tag> Tags { get; set; }
         public int LikesCount { get; set; }
+        public List<string>? LikedByUsers { get; set; }
         public int CommentsCount { get; set; }
         public string CreatedById { get; set; }
     }

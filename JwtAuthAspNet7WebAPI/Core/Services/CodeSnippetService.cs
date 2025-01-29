@@ -231,6 +231,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     Area = tag.Area
                 }).ToList(),
                 LikesCount = codeSnippet.Likes?.Count ?? 0,
+                LikedByUsers = codeSnippet.Likes?.Select(like => like.User.UserName!).ToList() ?? new List<string>(),
                 CommentsCount = codeSnippet.Comments?.Count ?? 0
             };
         }

@@ -152,9 +152,15 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                 .OrderByDescending(c => c.CreatedAt)
                 .ToListAsync();
 
-            var commentDtos = await Task.WhenAll(comments.Select(MapCommentToDtoAsync));
-            return commentDtos.ToList();
+            var commentDtos = new List<CommentDto>();
+            foreach (var comment in comments)
+            {
+                commentDtos.Add(await MapCommentToDtoAsync(comment)); 
+            }
+
+            return commentDtos;
         }
+
 
         public async Task<List<UserTagDto>> GetUserTagsForSnippetAsync(long snippetId)
         {
