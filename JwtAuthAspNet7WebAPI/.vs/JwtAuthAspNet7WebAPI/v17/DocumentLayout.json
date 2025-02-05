@@ -7,6 +7,14 @@
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\services\\codesnippetservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\codesnippetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:controllers\\codesnippetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\tagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:controllers\\tagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\entities\\like.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\entities\\like.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -39,10 +47,6 @@
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\tagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:controllers\\tagcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\core\\interfaces\\itagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:core\\interfaces\\itagservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -73,10 +77,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|e:\\bytebuddybe\\jwtauthaspnet7webapi\\controllers\\codesnippetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{79127E6C-0D03-4B88-A57A-9DA646CDB7C8}|JwtAuthAspNet7WebAPI.csproj|solutionrelative:controllers\\codesnippetscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/JwtAuthAspNet7WebAPIDB/True/SqlTable/dbo.AspNetUsers.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
@@ -130,37 +130,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Like.cs",
-              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\Like.cs",
-              "RelativeDocumentMoniker": "Core\\Entities\\Like.cs",
-              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\Like.cs",
-              "RelativeToolTip": "Core\\Entities\\Like.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T23:21:06.321Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "TagService.cs",
-              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\TagService.cs",
-              "RelativeDocumentMoniker": "Core\\Services\\TagService.cs",
-              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\TagService.cs",
-              "RelativeToolTip": "Core\\Services\\TagService.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAwwEAAAAAfAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T15:40:18.32Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "ScoialInteractionController.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\ScoialInteractionController.cs",
               "RelativeDocumentMoniker": "Controllers\\ScoialInteractionController.cs",
@@ -168,12 +142,11 @@
               "RelativeToolTip": "Controllers\\ScoialInteractionController.cs",
               "ViewState": "AgIAAC8AAAAAAAAAAAAIwD8AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T16:12:10.433Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-19T16:12:10.433Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "launchSettings.json",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
@@ -181,12 +154,11 @@
               "RelativeToolTip": "Properties\\launchSettings.json",
               "ViewState": "AgIAAAYAAAAAAAAAAAAIwCkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-01-19T16:33:41.452Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-19T16:33:41.452Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "ISocialInteraction.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Interfaces\\ISocialInteraction.cs",
               "RelativeDocumentMoniker": "Core\\Interfaces\\ISocialInteraction.cs",
@@ -194,8 +166,7 @@
               "RelativeToolTip": "Core\\Interfaces\\ISocialInteraction.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T16:11:15.008Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-19T16:11:15.008Z"
             },
             {
               "$type": "Document",
@@ -205,14 +176,14 @@
               "RelativeDocumentMoniker": "Core\\Services\\CodeSnippetService.cs",
               "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\CodeSnippetService.cs",
               "RelativeToolTip": "Core\\Services\\CodeSnippetService.cs",
-              "ViewState": "AgIAANEAAAAAAAAAAAAAwOkAAABUAAAAAAAAAA==",
+              "ViewState": "AgIAAKgAAAAAAAAAAAAAALIAAABLAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-19T20:55:23.64Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "socialInteractionService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\socialInteractionService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\socialInteractionService.cs",
@@ -220,12 +191,36 @@
               "RelativeToolTip": "Core\\Services\\socialInteractionService.cs",
               "ViewState": "AgIAAIcAAAAAAAAAAAAmwJ0AAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-26T15:45:09.292Z",
+              "WhenOpened": "2025-01-26T15:45:09.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CodeSnippetsController.cs",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\CodeSnippetsController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CodeSnippetsController.cs",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\CodeSnippetsController.cs",
+              "RelativeToolTip": "Controllers\\CodeSnippetsController.cs",
+              "ViewState": "AgIAAHoAAAAAAAAAAAD4v44AAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-19T21:09:15.619Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "Like.cs",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\Like.cs",
+              "RelativeDocumentMoniker": "Core\\Entities\\Like.cs",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\Like.cs",
+              "RelativeToolTip": "Core\\Entities\\Like.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-29T23:21:06.321Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "CodeSnippetDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\CodeSnippetDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\CodeSnippetDto.cs",
@@ -233,12 +228,36 @@
               "RelativeToolTip": "Core\\Dtos\\CodeSnippetDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwBAAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-20T23:00:47.206Z",
+              "WhenOpened": "2025-01-20T23:00:47.206Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "TagController.cs",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\TagController.cs",
+              "RelativeDocumentMoniker": "Controllers\\TagController.cs",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\TagController.cs",
+              "RelativeToolTip": "Controllers\\TagController.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAwwEcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-29T19:19:12.723Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 12,
+              "Title": "TagService.cs",
+              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\TagService.cs",
+              "RelativeDocumentMoniker": "Core\\Services\\TagService.cs",
+              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\TagService.cs",
+              "RelativeToolTip": "Core\\Services\\TagService.cs",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAwwEAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-19T15:40:18.32Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "ApplicationUser.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\ApplicationUser.cs",
               "RelativeDocumentMoniker": "Core\\Entities\\ApplicationUser.cs",
@@ -246,20 +265,7 @@
               "RelativeToolTip": "Core\\Entities\\ApplicationUser.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T16:26:03.853Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "CodeSnippetsController.cs",
-              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\CodeSnippetsController.cs",
-              "RelativeDocumentMoniker": "Controllers\\CodeSnippetsController.cs",
-              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\CodeSnippetsController.cs",
-              "RelativeToolTip": "Controllers\\CodeSnippetsController.cs",
-              "ViewState": "AgIAAHIAAAAAAAAAAAAmwIEAAAAQAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T21:09:15.619Z"
+              "WhenOpened": "2025-01-19T16:26:03.853Z"
             },
             {
               "$type": "Document",
@@ -281,7 +287,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "Program.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
@@ -289,25 +295,11 @@
               "RelativeToolTip": "Program.cs",
               "ViewState": "AgIAAH0AAAAAAAAAAAAWwHQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-19T21:41:30.259Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-19T21:41:30.259Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "TagController.cs",
-              "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\TagController.cs",
-              "RelativeDocumentMoniker": "Controllers\\TagController.cs",
-              "ToolTip": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\TagController.cs",
-              "RelativeToolTip": "Controllers\\TagController.cs",
-              "ViewState": "AgIAAC8AAAAAAAAAAAAwwEcAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T19:19:12.723Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "ITagService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Interfaces\\ITagService.cs",
               "RelativeDocumentMoniker": "Core\\Interfaces\\ITagService.cs",
@@ -315,12 +307,11 @@
               "RelativeToolTip": "Core\\Interfaces\\ITagService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T19:00:50.826Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-29T19:00:50.826Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "UserTag.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Entities\\UserTag.cs",
               "RelativeDocumentMoniker": "Core\\Entities\\UserTag.cs",
@@ -332,7 +323,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "AuthService.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Core\\Services\\AuthService.cs",
@@ -344,7 +335,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "AuthServiceResponseDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\AuthServiceResponseDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\AuthServiceResponseDto.cs",
@@ -356,7 +347,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "ApplicationUserDto.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Dtos\\ApplicationUserDto.cs",
               "RelativeDocumentMoniker": "Core\\Dtos\\ApplicationUserDto.cs",
@@ -368,7 +359,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "MapApplicationUser.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Core\\Mapper\\MapApplicationUser.cs",
               "RelativeDocumentMoniker": "Core\\Mapper\\MapApplicationUser.cs",
@@ -380,7 +371,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "AuthController.cs",
               "DocumentMoniker": "E:\\ByteBuddyBE\\JwtAuthAspNet7WebAPI\\Controllers\\AuthController.cs",
               "RelativeDocumentMoniker": "Controllers\\AuthController.cs",

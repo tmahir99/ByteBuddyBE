@@ -175,7 +175,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     cs.Title.ToLower().Contains(searchTerm) ||
                     cs.Description.ToLower().Contains(searchTerm) ||
                     cs.ProgrammingLanguage.ToLower().Contains(searchTerm) ||
-                    cs.Tags.Any(t => t.Name.ToLower().Contains(searchTerm))
+                    cs.Tags.Any(t => t.Name.ToLower().Contains(searchTerm)) ||
+                    cs.Tags.Any(t => t.Area.ToLower().Contains(searchTerm))
                 );
             }
 
@@ -231,7 +232,10 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     Area = tag.Area
                 }).ToList(),
                 LikesCount = codeSnippet.Likes?.Count ?? 0,
-                LikedByUsers = codeSnippet.Likes?.Select(like => like.User.UserName!).ToList() ?? new List<string>(),
+                LikedByUsers = codeSnippet.Likes?
+    .Where(like => like.User != null)
+    .Select(like => like.User.UserName!)
+    .ToList() ?? new List<string>(),
                 CommentsCount = codeSnippet.Comments?.Count ?? 0
             };
         }
