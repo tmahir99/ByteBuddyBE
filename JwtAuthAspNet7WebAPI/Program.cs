@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -82,37 +83,78 @@ builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 
 builder.Services.AddScoped<ISocialInteractionService, SocialInteractionService>();
 
+builder.Services.AddScoped<IPageService, PageService>();
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+builder.Services.AddScoped<IFileService, FileService>();
+
+builder.Services.AddScoped<ISearchService, SearchService>();
+
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    // API Information
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "ByteBuddy API",
+        Description = "A comprehensive ASP.NET Core Web API for ByteBuddy - A social platform for sharing code snippets, connecting with developers, and collaborative coding.",
+        Contact = new OpenApiContact
+        {
+            Name = "ByteBuddy Development Team",
+            Email = "support@bytebuddy.com"
+        },
+        License = new OpenApiLicense
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT")
+        }
+    });
+
+    // Include XML comments for better documentation
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+    {
+        options.IncludeXmlComments(xmlPath);
+    }
+
+    // JWT Bearer Authentication
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Please enter your token with this format: ''Bearer YOUR_TOKEN''",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
         BearerFormat = "JWT",
-        Scheme = "bearer"
+        In = ParameterLocation.Header,
+        Description = "Enter 'Bearer' followed by a space and your JWT token. Example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'"
     });
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
             {
-                Name = "Bearer",
-                In = ParameterLocation.Header,
                 Reference = new OpenApiReference
                 {
-                    Id = "Bearer",
-                    Type = ReferenceType.SecurityScheme
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 }
             },
-            new List<string>()
+            Array.Empty<string>()
         }
     });
+
+    // Group endpoints by tags
+    options.TagActionsBy(api => new[] { api.GroupName ?? api.ActionDescriptor.RouteValues["controller"] });
+    options.DocInclusionPredicate((name, api) => true);
+
+    // Custom operation filters for better documentation
+    options.EnableAnnotations();
 });
 
 // pipeline
@@ -134,6 +176,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable static file serving for uploads
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

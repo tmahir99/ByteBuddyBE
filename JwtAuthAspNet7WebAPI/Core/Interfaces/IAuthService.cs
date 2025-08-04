@@ -1,4 +1,4 @@
-﻿using JwtAuthAspNet7WebAPI.Core.Dtos;
+using JwtAuthAspNet7WebAPI.Core.Dtos;
 
 namespace JwtAuthAspNet7WebAPI.Core.Interfaces
 {
@@ -14,5 +14,9 @@ namespace JwtAuthAspNet7WebAPI.Core.Interfaces
         Task<AuthServiceResponseDto> RemoveAdminAsync(UpdatePermissionDto updatePermissionDto);
         Task<AuthServiceResponseDto> RemoveUserAsync(UpdatePermissionDto updatePermissionDto);
         Task<AuthServiceResponseDto> RemoveGuestAsync(UpdatePermissionDto updatePermissionDto);
+
+        // Email Activation Methods
+        Task<AuthServiceResponseDto> ActivateEmailAsync(string token);
+        Task<AuthServiceResponseDto> ResendActivationEmailAsync(string email);
     }
 }

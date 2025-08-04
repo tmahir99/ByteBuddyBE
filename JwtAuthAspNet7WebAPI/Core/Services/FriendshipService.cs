@@ -1,157 +1,283 @@
-﻿using JwtAuthAspNet7WebAPI.Core.DbContext;
+using JwtAuthAspNet7WebAPI.Core.DbContext;
 using JwtAuthAspNet7WebAPI.Core.Dtos;
-using JwtAuthAspNet7WebAPI.Core.Dtos.JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Entities;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace JwtAuthAspNet7WebAPI.Core.Services
 {
     public class FriendshipService : IFriendshipService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<FriendshipService> _logger;
 
-        public FriendshipService(ApplicationDbContext context)
+        public FriendshipService(ApplicationDbContext context, ILogger<FriendshipService> logger)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<FriendshipDto> SendFriendRequestAsync(string requesterId, string addresseeId)
         {
-            // Validate users exist
-            var requester = await _context.Users.FindAsync(requesterId);
-            var addressee = await _context.Users.FindAsync(addresseeId);
-
-            if (requester == null || addressee == null)
+            try
             {
-                throw new KeyNotFoundException("One or both users not found");
+                if (string.IsNullOrWhiteSpace(requesterId) || string.IsNullOrWhiteSpace(addresseeId))
+                {
+                    _logger.LogWarning("SendFriendRequest called with null or empty user IDs");
+                    throw new ArgumentException("User IDs cannot be null or empty");
+                }
+
+                if (requesterId == addresseeId)
+                {
+                    _logger.LogWarning("User {UserId} attempted to send friend request to themselves", requesterId);
+                    throw new InvalidOperationException("Cannot send friend request to yourself");
+                }
+
+                _logger.LogInformation("Sending friend request from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+
+                // Validate users exist
+                var requester = await _context.Users.FindAsync(requesterId);
+                var addressee = await _context.Users.FindAsync(addresseeId);
+
+                if (requester == null || addressee == null)
+                {
+                    _logger.LogWarning("Friend request failed: One or both users not found - Requester: {RequesterId}, Addressee: {AddresseeId}", requesterId, addresseeId);
+                    throw new KeyNotFoundException("One or both users not found");
+                }
+
+                // Check if friendship already exists
+                var existingFriendship = await _context.Friendships
+                    .FirstOrDefaultAsync(f =>
+                        (f.RequesterId == requesterId && f.AddresseeId == addresseeId) ||
+                        (f.RequesterId == addresseeId && f.AddresseeId == requesterId));
+
+                if (existingFriendship != null)
+                {
+                    _logger.LogWarning("Friend request failed: Relationship already exists between {RequesterId} and {AddresseeId}", requesterId, addresseeId);
+                    throw new InvalidOperationException("Friendship request already exists");
+                }
+
+                var friendship = new Friendship
+                {
+                    RequesterId = requesterId,
+                    AddresseeId = addresseeId,
+                    Status = FriendshipStatus.Pending,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Friendships.Add(friendship);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Friend request sent successfully from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+                return MapToDto(friendship);
             }
-
-            // Check if friendship already exists
-            var existingFriendship = await _context.Friendships
-                .FirstOrDefaultAsync(f =>
-                    (f.RequesterId == requesterId && f.AddresseeId == addresseeId) ||
-                    (f.RequesterId == addresseeId && f.AddresseeId == requesterId));
-
-            if (existingFriendship != null)
+            catch (Exception ex)
             {
-                throw new InvalidOperationException("Friendship request already exists");
+                _logger.LogError(ex, "Error sending friend request from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+                throw;
             }
-
-            var friendship = new Friendship
-            {
-                RequesterId = requesterId,
-                AddresseeId = addresseeId,
-                Status = FriendshipStatus.Pending,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Friendships.Add(friendship);
-            await _context.SaveChangesAsync();
-
-            return MapToDto(friendship);
         }
 
         public async Task<FriendshipDto> AcceptFriendRequestAsync(string requesterId, string addresseeId)
         {
-            var friendship = await _context.Friendships
-                .Include(f => f.Requester)
-                .Include(f => f.Addressee)
-                .FirstOrDefaultAsync(f =>
-                    f.RequesterId == requesterId &&
-                    f.AddresseeId == addresseeId &&
-                    f.Status == FriendshipStatus.Pending);
-
-            if (friendship == null)
+            try
             {
-                throw new KeyNotFoundException("Friend request not found");
+                if (string.IsNullOrWhiteSpace(requesterId) || string.IsNullOrWhiteSpace(addresseeId))
+                {
+                    _logger.LogWarning("AcceptFriendRequest called with null or empty user IDs");
+                    throw new ArgumentException("User IDs cannot be null or empty");
+                }
+
+                _logger.LogInformation("Accepting friend request from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+
+                var friendship = await _context.Friendships
+                    .Include(f => f.Requester)
+                    .Include(f => f.Addressee)
+                    .FirstOrDefaultAsync(f =>
+                        f.RequesterId == requesterId &&
+                        f.AddresseeId == addresseeId &&
+                        f.Status == FriendshipStatus.Pending);
+
+                if (friendship == null)
+                {
+                    _logger.LogWarning("Friend request not found for acceptance - Requester: {RequesterId}, Addressee: {AddresseeId}", requesterId, addresseeId);
+                    throw new KeyNotFoundException("Friend request not found");
+                }
+
+                friendship.Status = FriendshipStatus.Accepted;
+                friendship.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Friend request accepted successfully from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+                return MapToDto(friendship);
             }
-
-            friendship.Status = FriendshipStatus.Accepted;
-            await _context.SaveChangesAsync();
-
-            return MapToDto(friendship);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error accepting friend request from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+                throw;
+            }
         }
 
         public async Task DeclineFriendRequestAsync(string requesterId, string addresseeId)
         {
-            var friendship = await _context.Friendships
-                .FirstOrDefaultAsync(f =>
-                    f.RequesterId == requesterId &&
-                    f.AddresseeId == addresseeId &&
-                    f.Status == FriendshipStatus.Pending);
-
-            if (friendship == null)
+            try
             {
-                throw new KeyNotFoundException("Friend request not found");
-            }
+                if (string.IsNullOrWhiteSpace(requesterId) || string.IsNullOrWhiteSpace(addresseeId))
+                {
+                    _logger.LogWarning("DeclineFriendRequest called with null or empty user IDs");
+                    throw new ArgumentException("User IDs cannot be null or empty");
+                }
 
-            friendship.Status = FriendshipStatus.Declined;
-            await _context.SaveChangesAsync();
+                _logger.LogInformation("Declining friend request from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+
+                var friendship = await _context.Friendships
+                    .FirstOrDefaultAsync(f =>
+                        f.RequesterId == requesterId &&
+                        f.AddresseeId == addresseeId &&
+                        f.Status == FriendshipStatus.Pending);
+
+                if (friendship == null)
+                {
+                    _logger.LogWarning("Friend request not found for decline - Requester: {RequesterId}, Addressee: {AddresseeId}", requesterId, addresseeId);
+                    throw new KeyNotFoundException("Friend request not found");
+                }
+
+                friendship.Status = FriendshipStatus.Declined;
+                friendship.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Friend request declined successfully from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error declining friend request from {RequesterId} to {AddresseeId}", requesterId, addresseeId);
+                throw;
+            }
         }
 
         public async Task BlockUserAsync(string userId, string blockedUserId)
         {
-            // Remove any existing friendship
-            var existingFriendship = await _context.Friendships
-                .FirstOrDefaultAsync(f =>
-                    (f.RequesterId == userId && f.AddresseeId == blockedUserId) ||
-                    (f.RequesterId == blockedUserId && f.AddresseeId == userId));
-
-            if (existingFriendship != null)
+            try
             {
-                _context.Friendships.Remove(existingFriendship);
+                if (string.IsNullOrWhiteSpace(userId) || string.IsNullOrWhiteSpace(blockedUserId))
+                {
+                    _logger.LogWarning("BlockUser called with null or empty user IDs");
+                    throw new ArgumentException("User IDs cannot be null or empty");
+                }
+
+                if (userId == blockedUserId)
+                {
+                    _logger.LogWarning("User {UserId} attempted to block themselves", userId);
+                    throw new InvalidOperationException("Cannot block yourself");
+                }
+
+                _logger.LogInformation("Blocking user {BlockedUserId} by {UserId}", blockedUserId, userId);
+
+                // Remove any existing friendship
+                var existingFriendship = await _context.Friendships
+                    .FirstOrDefaultAsync(f =>
+                        (f.RequesterId == userId && f.AddresseeId == blockedUserId) ||
+                        (f.RequesterId == blockedUserId && f.AddresseeId == userId));
+
+                if (existingFriendship != null)
+                {
+                    _context.Friendships.Remove(existingFriendship);
+                    _logger.LogInformation("Removed existing friendship between {UserId} and {BlockedUserId}", userId, blockedUserId);
+                }
+
+                // Create blocked relationship
+                var blockFriendship = new Friendship
+                {
+                    RequesterId = userId,
+                    AddresseeId = blockedUserId,
+                    Status = FriendshipStatus.Blocked,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Friendships.Add(blockFriendship);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {BlockedUserId} blocked successfully by {UserId}", blockedUserId, userId);
             }
-
-            // Create blocked relationship
-            var blockFriendship = new Friendship
+            catch (Exception ex)
             {
-                RequesterId = userId,
-                AddresseeId = blockedUserId,
-                Status = FriendshipStatus.Blocked,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Friendships.Add(blockFriendship);
-            await _context.SaveChangesAsync();
+                _logger.LogError(ex, "Error blocking user {BlockedUserId} by {UserId}", blockedUserId, userId);
+                throw;
+            }
         }
 
         public async Task<List<FriendshipDto>> GetFriendRequestsAsync(string userId)
         {
-            var friendRequests = await _context.Friendships
-                .Include(f => f.Requester)
-                .Include(f => f.Addressee)
-                .Where(f =>
-                    f.AddresseeId == userId &&
-                    f.Status == FriendshipStatus.Pending)
-                .ToListAsync();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(userId))
+                {
+                    _logger.LogWarning("GetFriendRequests called with null or empty userId");
+                    throw new ArgumentException("User ID cannot be null or empty");
+                }
 
-            return friendRequests.Select(MapToDto).ToList();
+                _logger.LogInformation("Getting friend requests for user {UserId}", userId);
+
+                var friendRequests = await _context.Friendships
+                    .Include(f => f.Requester)
+                    .Include(f => f.Addressee)
+                    .Where(f =>
+                        f.AddresseeId == userId &&
+                        f.Status == FriendshipStatus.Pending)
+                    .ToListAsync();
+
+                _logger.LogInformation("Found {Count} friend requests for user {UserId}", friendRequests.Count, userId);
+                return friendRequests.Select(MapToDto).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting friend requests for user {UserId}", userId);
+                throw;
+            }
         }
 
         public async Task<List<ApplicationUserDto>> GetFriendsAsync(string userId)
         {
-            var friendships = await _context.Friendships
-                .Include(f => f.Requester)
-                .Include(f => f.Addressee)
-                .Where(f =>
-                    (f.RequesterId == userId || f.AddresseeId == userId) &&
-                    f.Status == FriendshipStatus.Accepted)
-                .ToListAsync();
-
-            var friends = friendships.Select(f =>
+            try
             {
-                var friend = f.RequesterId == userId ? f.Addressee : f.Requester;
-                return new ApplicationUserDto
+                if (string.IsNullOrWhiteSpace(userId))
                 {
-                    UserName = friend.UserName,
-                    FirstName = friend.FirstName,
-                    LastName = friend.LastName,
-                    Email = friend.Email
-                };
-            }).ToList();
+                    _logger.LogWarning("GetFriends called with null or empty userId");
+                    throw new ArgumentException("User ID cannot be null or empty");
+                }
 
-            return friends;
+                _logger.LogInformation("Getting friends for user {UserId}", userId);
+
+                var friendships = await _context.Friendships
+                    .Include(f => f.Requester)
+                    .Include(f => f.Addressee)
+                    .Where(f =>
+                        (f.RequesterId == userId || f.AddresseeId == userId) &&
+                        f.Status == FriendshipStatus.Accepted)
+                    .ToListAsync();
+
+                var friends = friendships.Select(f =>
+                {
+                    var friend = f.RequesterId == userId ? f.Addressee : f.Requester;
+                    return new ApplicationUserDto
+                    {
+                        Id = friend.Id,
+                        UserName = friend.UserName,
+                        FirstName = friend.FirstName,
+                        LastName = friend.LastName,
+                        Email = friend.Email
+                    };
+                }).ToList();
+
+                _logger.LogInformation("Found {Count} friends for user {UserId}", friends.Count, userId);
+                return friends;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting friends for user {UserId}", userId);
+                throw;
+            }
         }
 
         private static FriendshipDto MapToDto(Friendship friendship)

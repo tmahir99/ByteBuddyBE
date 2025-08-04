@@ -1,162 +1,264 @@
-﻿using JwtAuthAspNet7WebAPI.Core.DbContext;
+using AutoMapper;
+using JwtAuthAspNet7WebAPI.Core.DbContext;
 using JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Entities;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace JwtAuthAspNet7WebAPI.Core.Services
 {
     public class CodeSnippetService : ICodeSnippetService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ILogger<CodeSnippetService> _logger;
 
-        public CodeSnippetService(ApplicationDbContext context)
+        public CodeSnippetService(ApplicationDbContext context, IMapper mapper, ILogger<CodeSnippetService> logger)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<CodeSnippetDto> CreateAsync(CreateCodeSnippetDto dto)
         {
-            ValidateCreateDto(dto);
-
-            var codeSnippet = new CodeSnippet
+            try
             {
-                Title = dto.Title.Trim(),
-                CodeContent = dto.CodeContent,
-                Description = dto.Description?.Trim(),
-                ProgrammingLanguage = dto.ProgrammingLanguage.Trim(),
-                FileUrl = dto.FileUrl?.Trim(),
-                CreatedAt = DateTime.UtcNow,
-                CreatedById = dto.CreatedById,
-                Tags = new List<Tag>()
-            };
-
-            if (dto.TagIds?.Any() == true)
-            {
-                var tags = await _context.Tags
-                    .Where(t => dto.TagIds.Contains(t.Id))
-                    .ToListAsync();
-
-                if (tags.Count != dto.TagIds.Count)
+                if (dto == null)
                 {
-                    throw new InvalidOperationException("One or more tag IDs are invalid");
+                    _logger.LogWarning("CreateAsync called with null dto");
+                    throw new ArgumentNullException(nameof(dto));
                 }
 
-                codeSnippet.Tags = tags;
+                _logger.LogInformation("Creating code snippet with title: {Title}", dto.Title);
+                ValidateCreateDto(dto);
+
+                var codeSnippet = new CodeSnippet
+                {
+                    Title = dto.Title.Trim(),
+                    CodeContent = dto.CodeContent,
+                    Description = dto.Description?.Trim(),
+                    ProgrammingLanguage = dto.ProgrammingLanguage.Trim(),
+                    FileUrl = dto.FileUrl?.Trim(),
+                    CreatedAt = DateTime.UtcNow,
+                    CreatedById = dto.CreatedById,
+                    Tags = new List<Tag>()
+                };
+
+                if (dto.TagIds?.Any() == true)
+                {
+                    var tags = await _context.Tags
+                        .Where(t => dto.TagIds.Contains(t.Id))
+                        .ToListAsync();
+
+                    if (tags.Count != dto.TagIds.Count)
+                    {
+                        _logger.LogWarning("Invalid tag IDs provided for code snippet creation");
+                        throw new InvalidOperationException("One or more tag IDs are invalid");
+                    }
+
+                    codeSnippet.Tags = tags;
+                }
+
+                _context.CodeSnippets.Add(codeSnippet);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Code snippet created successfully with ID: {Id}", codeSnippet.Id);
+                return await GetByIdAsync(codeSnippet.Id);
             }
-
-            _context.CodeSnippets.Add(codeSnippet);
-            await _context.SaveChangesAsync();
-
-            return await GetByIdAsync(codeSnippet.Id);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating code snippet with title: {Title}", dto?.Title);
+                throw;
+            }
         }
 
         public async Task<CodeSnippetDto> GetByIdAsync(long id)
         {
-            var codeSnippet = await _context.CodeSnippets
-                .Include(cs => cs.Tags)
-                .Include(cs => cs.CreatedBy)
-                .Include(cs => cs.Likes)
-                .Include(cs => cs.Comments)
-                .FirstOrDefaultAsync(cs => cs.Id == id);
-
-            if (codeSnippet == null)
+            try
             {
-                throw new KeyNotFoundException($"Code snippet with ID {id} not found");
-            }
+                if (id <= 0)
+                {
+                    _logger.LogWarning("GetByIdAsync called with invalid ID: {Id}", id);
+                    throw new ArgumentException("ID must be greater than 0", nameof(id));
+                }
 
-            return MapToDto(codeSnippet);
+                _logger.LogInformation("Getting code snippet by ID: {Id}", id);
+
+                var codeSnippet = await _context.CodeSnippets
+                    .Include(cs => cs.Tags)
+                    .Include(cs => cs.CreatedBy)
+                    .Include(cs => cs.Likes)
+                    .Include(cs => cs.Comments)
+                    .FirstOrDefaultAsync(cs => cs.Id == id);
+
+                if (codeSnippet == null)
+                {
+                    _logger.LogWarning("Code snippet not found with ID: {Id}", id);
+                    throw new KeyNotFoundException($"Code snippet with ID {id} not found");
+                }
+
+                return MapToDto(codeSnippet);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting code snippet by ID: {Id}", id);
+                throw;
+            }
         }
 
         public async Task<PaginatedResult<CodeSnippetDto>> GetAllAsync(CodeSnippetFilterDto filter)
         {
-            ValidateFilterDto(filter);
-
-            var query = BuildFilterQuery(filter);
-            var total = await query.CountAsync();
-
-            var items = await query
-                .Skip((filter.Page - 1) * filter.PageSize)
-                .Take(filter.PageSize)
-                .ToListAsync();
-
-            var mappedItems = items.Select(MapToDto).ToList();
-
-            return new PaginatedResult<CodeSnippetDto>
+            try
             {
-                Items = mappedItems,
-                TotalCount = total,
-                PageSize = filter.PageSize,
-                CurrentPage = filter.Page,
-                TotalPages = (int)Math.Ceiling(total / (double)filter.PageSize)
-            };
+                if (filter == null)
+                {
+                    _logger.LogWarning("GetAllAsync called with null filter");
+                    throw new ArgumentNullException(nameof(filter));
+                }
+
+                _logger.LogInformation("Getting code snippets with filter - Page: {Page}, PageSize: {PageSize}", filter.Page, filter.PageSize);
+                ValidateFilterDto(filter);
+
+                var query = BuildFilterQuery(filter);
+                var total = await query.CountAsync();
+
+                var items = await query
+                    .Skip((filter.Page - 1) * filter.PageSize)
+                    .Take(filter.PageSize)
+                    .ToListAsync();
+
+                var mappedItems = items.Select(MapToDto).ToList();
+
+                _logger.LogInformation("Retrieved {Count} code snippets out of {Total} total", mappedItems.Count, total);
+
+                return new PaginatedResult<CodeSnippetDto>
+                {
+                    Items = mappedItems,
+                    TotalCount = total,
+                    PageSize = filter.PageSize,
+                    CurrentPage = filter.Page,
+                    TotalPages = (int)Math.Ceiling(total / (double)filter.PageSize)
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting code snippets with filter");
+                throw;
+            }
         }
 
         public async Task UpdateAsync(long id, UpdateCodeSnippetDto dto)
         {
-            var codeSnippet = await _context.CodeSnippets
-                .Include(cs => cs.Tags)
-                .FirstOrDefaultAsync(cs => cs.Id == id);
-
-            if (codeSnippet == null)
+            try
             {
-                throw new KeyNotFoundException($"Code snippet with ID {id} not found");
-            }
-
-            if (dto.CreatedById != codeSnippet.CreatedById)
-            {
-                throw new UnauthorizedAccessException("You can only update your own code snippets");
-            }
-
-            ValidateUpdateDto(dto);
-
-            // Update basic properties if provided
-            codeSnippet.Title = dto.Title?.Trim() ?? codeSnippet.Title;
-            codeSnippet.CodeContent = dto.CodeContent ?? codeSnippet.CodeContent;
-            codeSnippet.Description = dto.Description?.Trim() ?? codeSnippet.Description;
-            codeSnippet.ProgrammingLanguage = dto.ProgrammingLanguage?.Trim() ?? codeSnippet.ProgrammingLanguage;
-            codeSnippet.FileUrl = dto.FileUrl?.Trim() ?? codeSnippet.FileUrl;
-
-            // Update tags if provided
-            if (dto.TagIds != null)
-            {
-                var newTags = await _context.Tags
-                    .Where(t => dto.TagIds.Contains(t.Id))
-                    .ToListAsync();
-
-                if (newTags.Count != dto.TagIds.Count)
+                if (id <= 0)
                 {
-                    throw new InvalidOperationException("One or more tag IDs are invalid");
+                    _logger.LogWarning("UpdateAsync called with invalid ID: {Id}", id);
+                    throw new ArgumentException("ID must be greater than 0", nameof(id));
                 }
 
-                codeSnippet.Tags.Clear();
-                foreach (var tag in newTags)
+                if (dto == null)
                 {
-                    codeSnippet.Tags.Add(tag);
+                    _logger.LogWarning("UpdateAsync called with null dto");
+                    throw new ArgumentNullException(nameof(dto));
                 }
-            }
 
-            await _context.SaveChangesAsync();
+                _logger.LogInformation("Updating code snippet with ID: {Id}", id);
+
+                var codeSnippet = await _context.CodeSnippets
+                    .Include(cs => cs.Tags)
+                    .FirstOrDefaultAsync(cs => cs.Id == id);
+
+                if (codeSnippet == null)
+                {
+                    _logger.LogWarning("Code snippet not found for update with ID: {Id}", id);
+                    throw new KeyNotFoundException($"Code snippet with ID {id} not found");
+                }
+
+                if (dto.CreatedById != codeSnippet.CreatedById)
+                {
+                    _logger.LogWarning("Unauthorized update attempt on code snippet {Id} by user {UserId}", id, dto.CreatedById);
+                    throw new UnauthorizedAccessException("You can only update your own code snippets");
+                }
+
+                ValidateUpdateDto(dto);
+
+                // Update basic properties if provided
+                codeSnippet.Title = dto.Title?.Trim() ?? codeSnippet.Title;
+                codeSnippet.CodeContent = dto.CodeContent ?? codeSnippet.CodeContent;
+                codeSnippet.Description = dto.Description?.Trim() ?? codeSnippet.Description;
+                codeSnippet.ProgrammingLanguage = dto.ProgrammingLanguage?.Trim() ?? codeSnippet.ProgrammingLanguage;
+                codeSnippet.FileUrl = dto.FileUrl?.Trim() ?? codeSnippet.FileUrl;
+
+                // Update tags if provided
+                if (dto.TagIds != null)
+                {
+                    var newTags = await _context.Tags
+                        .Where(t => dto.TagIds.Contains(t.Id))
+                        .ToListAsync();
+
+                    if (newTags.Count != dto.TagIds.Count)
+                    {
+                        _logger.LogWarning("Invalid tag IDs provided for code snippet update");
+                        throw new InvalidOperationException("One or more tag IDs are invalid");
+                    }
+
+                    codeSnippet.Tags.Clear();
+                    foreach (var tag in newTags)
+                    {
+                        codeSnippet.Tags.Add(tag);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                _logger.LogInformation("Code snippet updated successfully with ID: {Id}", id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating code snippet with ID: {Id}", id);
+                throw;
+            }
         }
 
         public async Task DeleteAsync(long id)
         {
-            var codeSnippet = await _context.CodeSnippets
-                .Include(cs => cs.Comments)
-                .Include(cs => cs.Likes)
-                .FirstOrDefaultAsync(cs => cs.Id == id);
-
-            if (codeSnippet == null)
+            try
             {
-                throw new KeyNotFoundException($"Code snippet with ID {id} not found");
-            }
+                if (id <= 0)
+                {
+                    _logger.LogWarning("DeleteAsync called with invalid ID: {Id}", id);
+                    throw new ArgumentException("ID must be greater than 0", nameof(id));
+                }
 
-            // Remove related entities first
-            _context.Comments.RemoveRange(codeSnippet.Comments);
-            _context.Likes.RemoveRange(codeSnippet.Likes);
-            
-            _context.CodeSnippets.Remove(codeSnippet);
-            await _context.SaveChangesAsync();
+                _logger.LogInformation("Deleting code snippet with ID: {Id}", id);
+
+                var codeSnippet = await _context.CodeSnippets
+                    .Include(cs => cs.Comments)
+                    .Include(cs => cs.Likes)
+                    .FirstOrDefaultAsync(cs => cs.Id == id);
+
+                if (codeSnippet == null)
+                {
+                    _logger.LogWarning("Code snippet not found for deletion with ID: {Id}", id);
+                    throw new KeyNotFoundException($"Code snippet with ID {id} not found");
+                }
+
+                // Remove related entities first
+                _context.Comments.RemoveRange(codeSnippet.Comments);
+                _context.Likes.RemoveRange(codeSnippet.Likes);
+                
+                _context.CodeSnippets.Remove(codeSnippet);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("Code snippet deleted successfully with ID: {Id}", id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting code snippet with ID: {Id}", id);
+                throw;
+            }
         }
 
         private IQueryable<CodeSnippet> BuildFilterQuery(CodeSnippetFilterDto filter)

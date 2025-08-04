@@ -1,14 +1,34 @@
-﻿namespace JwtAuthAspNet7WebAPI.Core.Entities
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace JwtAuthAspNet7WebAPI.Core.Entities
 {
     public class UserTag
     {
+        [Key]
         public long Id { get; set; }
+        
+        [Required]
+        [StringLength(450)]
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        
+        [ForeignKey("UserId")]
+        public virtual ApplicationUser User { get; set; }
+        
+        [Required]
         public long CodeSnippetId { get; set; }
-        public CodeSnippet CodeSnippet { get; set; }
+        
+        [ForeignKey("CodeSnippetId")]
+        public virtual CodeSnippet CodeSnippet { get; set; }
+        
+        [Required]
         public DateTime CreatedAt { get; set; }
+        
+        [Required]
+        [StringLength(450)]
         public string CreatedById { get; set; }
-        public ApplicationUser CreatedBy { get; set; }
+        
+        [ForeignKey("CreatedById")]
+        public virtual ApplicationUser CreatedBy { get; set; }
     }
 }

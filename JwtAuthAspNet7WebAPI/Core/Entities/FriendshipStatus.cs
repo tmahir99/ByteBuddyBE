@@ -1,4 +1,4 @@
-﻿namespace JwtAuthAspNet7WebAPI.Core.Entities
+namespace JwtAuthAspNet7WebAPI.Core.Entities
 {
     public enum FriendshipStatus
     {
@@ -7,5 +7,4 @@
         Declined,
         Blocked
     }
-
 }

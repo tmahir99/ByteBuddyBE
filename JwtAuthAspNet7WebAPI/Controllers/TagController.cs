@@ -1,4 +1,4 @@
-﻿using JwtAuthAspNet7WebAPI.Core.Dtos;
+using JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
 using JwtAuthAspNet7WebAPI.Core.OtherObjects;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +19,6 @@ namespace JwtAuthAspNet7WebAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = StaticUserRoles.GUEST + "," + StaticUserRoles.ADMIN)]
-        //[Authorize(Roles = StaticUserRoles.ADMIN)]
         [ProducesResponseType(typeof(TagDto), StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<TagDto>> Create([FromBody] TagDto dto)
@@ -31,7 +30,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -48,7 +47,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                return NotFound();
+                return NotFound(new { error = $"Tag with ID {id} not found" });
             }
         }
 
@@ -81,7 +80,6 @@ namespace JwtAuthAspNet7WebAPI.Controllers
 
         [HttpPut("{id}")]
         [Authorize(Roles = StaticUserRoles.USER + "," + StaticUserRoles.ADMIN)]
-        //[Authorize(Roles = StaticUserRoles.ADMIN)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -94,17 +92,16 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                return NotFound();
+                return NotFound(new { error = $"Tag with ID {id} not found" });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = StaticUserRoles.USER + "," + StaticUserRoles.ADMIN)]
-        //[Authorize(Roles = StaticUserRoles.ADMIN)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,11 +114,11 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             }
             catch (KeyNotFoundException)
             {
-                return NotFound();
+                return NotFound(new { error = $"Tag with ID {id} not found" });
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new { error = ex.Message });
             }
         }
     }

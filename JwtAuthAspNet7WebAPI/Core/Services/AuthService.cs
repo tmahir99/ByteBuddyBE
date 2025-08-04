@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Entities;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
@@ -6,6 +6,7 @@ using JwtAuthAspNet7WebAPI.Core.OtherObjects;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,92 +18,164 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthService> _logger;
+        private readonly IEmailService _emailService;
 
-        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper)
+        public AuthService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IMapper mapper, IConfiguration configuration, ILogger<AuthService> logger, IEmailService emailService)
         {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _configuration = configuration;
-            _mapper = mapper;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _emailService = emailService ?? throw new ArgumentNullException(nameof(emailService));
         }
 
         public async Task<AuthServiceResponseDto> LoginAsync(LoginDto loginDto)
         {
-            var user = await _userManager.FindByNameAsync(loginDto.UserName);
-
-            if (user is null)
-                return new AuthServiceResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Invalid Credentials"
-                };
-
-            var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-
-            if (!isPasswordCorrect)
-                return new AuthServiceResponseDto()
-                {
-                    IsSucceed = false,
-                    Message = "Invalid Credentials"
-                };
-
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            var authClaims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.UserName),
-        new Claim(ClaimTypes.NameIdentifier, user.Id),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim("JWTID", Guid.NewGuid().ToString()),
-        new Claim("FirstName", user.FirstName),
-        new Claim("LastName", user.LastName),
-        new Claim("DateOfBirth", user.DateOfBirth.ToString("yyyy-MM-dd")),
-        new Claim("Gender", user.Gender),
-        new Claim("BirthPlace", user.BirthPlace),
-        new Claim("Address", user.Address)
-    };
-
-            foreach (var userRole in userRoles)
+            try
             {
-                authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                if (loginDto == null)
+                {
+                    _logger.LogWarning("Login attempt with null loginDto");
+                    throw new ArgumentNullException(nameof(loginDto));
+                }
+
+                _logger.LogInformation("Login attempt for user: {UserName}", loginDto.UserName);
+                
+                var user = await _userManager.FindByNameAsync(loginDto.UserName);
+
+                if (user is null)
+                {
+                    _logger.LogWarning("Login failed: User not found - {UserName}", loginDto.UserName);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Invalid credentials"
+                    };
+                }
+
+                var isPasswordCorrect = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+
+                if (!isPasswordCorrect)
+                {
+                    _logger.LogWarning("Login failed: Invalid password for user - {UserName}", loginDto.UserName);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Invalid credentials"
+                    };
+                }
+
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim("JWTID", Guid.NewGuid().ToString()),
+                    new Claim("FirstName", user.FirstName),
+                    new Claim("LastName", user.LastName),
+                    new Claim("DateOfBirth", user.DateOfBirth.ToString("yyyy-MM-dd")),
+                    new Claim("Gender", user.Gender),
+                    new Claim("BirthPlace", user.BirthPlace),
+                    new Claim("Address", user.Address)
+                };
+
+                foreach (var userRole in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+
+                var token = GenerateNewJsonWebToken(authClaims);
+
+                // Update last login timestamp
+                user.LastLoginAt = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+
+                _logger.LogInformation("Login successful for user: {UserName}", loginDto.UserName);
+                
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Message = token,
+                    Roles = userRoles.ToList(),
+                    User = _mapper.Map<ApplicationUserDto>(user)
+                };
             }
-
-            var token = GenerateNewJsonWebToken(authClaims);
-
-            return new AuthServiceResponseDto()
+            catch (Exception ex)
             {
-                IsSucceed = true,
-                Message = token,
-                Roles = userRoles.ToList(),
-                User = _mapper.Map<ApplicationUserDto>(user) 
-            };
+                _logger.LogError(ex, "Error during login for user: {UserName}", loginDto?.UserName);
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "An error occurred during login"
+                };
+            }
         }
 
         public async Task<AuthServiceResponseDto> MakeAdminAsync(UpdatePermissionDto updatePermissionDto)
         {
-            var user = await _userManager.FindByNameAsync(updatePermissionDto.UserName);
+            try
+            {
+                if (updatePermissionDto == null)
+                {
+                    _logger.LogWarning("MakeAdmin attempt with null updatePermissionDto");
+                    throw new ArgumentNullException(nameof(updatePermissionDto));
+                }
 
-            if (user is null)
+                _logger.LogInformation("Attempting to make user admin: {UserName}", updatePermissionDto.UserName);
+                
+                var user = await _userManager.FindByNameAsync(updatePermissionDto.UserName);
+
+                if (user is null)
+                {
+                    _logger.LogWarning("MakeAdmin failed: User not found - {UserName}", updatePermissionDto.UserName);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "User not found"
+                    };
+                }
+
+                var result = await _userManager.AddToRoleAsync(user, StaticUserRoles.ADMIN);
+                
+                if (!result.Succeeded)
+                {
+                    _logger.LogWarning("Failed to add admin role to user: {UserName}. Errors: {Errors}", 
+                        updatePermissionDto.UserName, string.Join(", ", result.Errors.Select(e => e.Description)));
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Failed to assign admin role"
+                    };
+                }
+
+                _logger.LogInformation("Successfully made user admin: {UserName}", updatePermissionDto.UserName);
+                
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Message = $"User '{user.UserName}' is now an admin"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error making user admin: {UserName}", updatePermissionDto?.UserName);
                 return new AuthServiceResponseDto()
                 {
                     IsSucceed = false,
-                    Message = "Invalid User name!!!!!!!!"
+                    Message = "An error occurred while assigning admin role"
                 };
-
-            await _userManager.AddToRoleAsync(user, StaticUserRoles.ADMIN);
-
-            return new AuthServiceResponseDto()
-            {
-                IsSucceed = true,
-                Message = "User " + user + " is now an ADMIN"
-            };
+            }
         }
 
         public async Task<AuthServiceResponseDto> MakeUserAsync(UpdatePermissionDto updatePermissionDto)
         {
-            var user = await _userManager.FindByNameAsync(updatePermissionDto.UserName);
+            try
 
             if (user is null)
                 return new AuthServiceResponseDto()
@@ -140,17 +213,24 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     Message = "Email Already Exists"
                 };
 
-            ApplicationUser newUser = new ApplicationUser()
+            // Generate email confirmation token
+            var emailConfirmationToken = Guid.NewGuid().ToString();
+            
+            var newUser = new ApplicationUser()
             {
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 Email = registerDto.Email,
                 UserName = registerDto.UserName,
-                SecurityStamp = Guid.NewGuid().ToString(),
                 DateOfBirth = registerDto.DateOfBirth,
                 Gender = registerDto.Gender,
                 BirthPlace = registerDto.BirthPlace,
-                Address = registerDto.Address
+                Address = registerDto.Address,
+                EmailConfirmed = false,
+                IsEmailConfirmed = false,
+                EmailConfirmationToken = emailConfirmationToken,
+                EmailConfirmationTokenExpiry = DateTime.UtcNow.AddHours(24),
+                CreatedAt = DateTime.UtcNow
             };
 
             var createUserResult = await _userManager.CreateAsync(newUser, registerDto.Password);
@@ -383,6 +463,193 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                 IsSucceed = true,
                 Message = "User " + user + "  is no longer a GUEST"
             };
+        }
+
+        public async Task<AuthServiceResponseDto> ActivateEmailAsync(string token)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    _logger.LogWarning("ActivateEmailAsync called with empty token");
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Invalid activation token"
+                    };
+                }
+
+                _logger.LogInformation("Attempting to activate email with token: {Token}", token);
+
+                var user = await _userManager.Users
+                    .FirstOrDefaultAsync(u => u.EmailConfirmationToken == token);
+
+                if (user == null)
+                {
+                    _logger.LogWarning("No user found with activation token: {Token}", token);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Invalid activation token"
+                    };
+                }
+
+                if (user.EmailConfirmationTokenExpiry < DateTime.UtcNow)
+                {
+                    _logger.LogWarning("Activation token expired for user: {UserId}", user.Id);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Activation token has expired. Please request a new activation email."
+                    };
+                }
+
+                if (user.IsEmailConfirmed)
+                {
+                    _logger.LogInformation("Email already confirmed for user: {UserId}", user.Id);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = true,
+                        Message = "Email is already confirmed"
+                    };
+                }
+
+                // Activate the user
+                user.IsEmailConfirmed = true;
+                user.EmailConfirmed = true;
+                user.EmailConfirmationToken = null;
+                user.EmailConfirmationTokenExpiry = null;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("Failed to activate email for user: {UserId}. Errors: {Errors}", 
+                        user.Id, string.Join(", ", result.Errors.Select(e => e.Description)));
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Failed to activate email"
+                    };
+                }
+
+                // Send welcome email
+                try
+                {
+                    await _emailService.SendWelcomeEmailAsync(user.Email, user.UserName);
+                    _logger.LogInformation("Welcome email sent to activated user: {Email}", user.Email);
+                }
+                catch (Exception emailEx)
+                {
+                    _logger.LogError(emailEx, "Failed to send welcome email to {Email}", user.Email);
+                    // Don't fail activation if welcome email fails
+                }
+
+                _logger.LogInformation("Email activated successfully for user: {UserId}", user.Id);
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Message = "Email activated successfully! Welcome to ByteBuddy!"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error activating email with token: {Token}", token);
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "An error occurred during email activation"
+                };
+            }
+        }
+
+        public async Task<AuthServiceResponseDto> ResendActivationEmailAsync(string email)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    _logger.LogWarning("ResendActivationEmailAsync called with empty email");
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Email is required"
+                    };
+                }
+
+                _logger.LogInformation("Resending activation email to: {Email}", email);
+
+                var user = await _userManager.FindByEmailAsync(email);
+
+                if (user == null)
+                {
+                    _logger.LogWarning("No user found with email: {Email}", email);
+                    // Don't reveal if email exists or not for security
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = true,
+                        Message = "If the email exists in our system, an activation link has been sent."
+                    };
+                }
+
+                if (user.IsEmailConfirmed)
+                {
+                    _logger.LogInformation("Email already confirmed for user: {Email}", email);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = true,
+                        Message = "Email is already confirmed"
+                    };
+                }
+
+                // Generate new activation token
+                var newToken = Guid.NewGuid().ToString();
+                user.EmailConfirmationToken = newToken;
+                user.EmailConfirmationTokenExpiry = DateTime.UtcNow.AddHours(24);
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("Failed to update activation token for user: {Email}", email);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Failed to resend activation email"
+                    };
+                }
+
+                // Send activation email
+                try
+                {
+                    await _emailService.SendActivationEmailAsync(user.Email, user.UserName, newToken);
+                    _logger.LogInformation("Activation email resent successfully to: {Email}", email);
+                }
+                catch (Exception emailEx)
+                {
+                    _logger.LogError(emailEx, "Failed to resend activation email to {Email}", email);
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Failed to send activation email"
+                    };
+                }
+
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Message = "Activation email sent successfully. Please check your email."
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resending activation email to: {Email}", email);
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = false,
+                    Message = "An error occurred while resending activation email"
+                };
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using JwtAuthAspNet7WebAPI.Core.Dtos;
+using JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
 using JwtAuthAspNet7WebAPI.Core.OtherObjects;
 using Microsoft.AspNetCore.Authorization;
@@ -22,9 +22,8 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         [Route("seed-roles")]
         public async Task<IActionResult> SeedRoles()
         {
-            var seerRoles = await _authService.SeedRolesAsync();
-
-            return Ok(seerRoles);
+            var seedRoles = await _authService.SeedRolesAsync();
+            return Ok(seedRoles);
         }
 
 
@@ -59,7 +58,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         // Route -> make guest -> admin
         [HttpPost]
         [Route("make-admin")]
-        //[Authorize(Roles = StaticUserRoles.ADMIN)]
+        [Authorize(Roles = StaticUserRoles.ADMIN)]
         public async Task<IActionResult> MakeAdmin([FromBody] UpdatePermissionDto updatePermissionDto)
         {
             var operationResult = await _authService.MakeAdminAsync(updatePermissionDto);
@@ -73,7 +72,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         // Route -> make guest -> user
         [HttpPost]
         [Route("make-user")]
-        [Authorize(Roles =StaticUserRoles.ADMIN)]
+        [Authorize(Roles = StaticUserRoles.ADMIN)]
         public async Task<IActionResult> MakeUser([FromBody] UpdatePermissionDto updatePermissionDto)
         {
             var operationResult = await _authService.MakeUserAsync(updatePermissionDto);
@@ -95,6 +94,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
 
         [HttpGet]
         [Route("GetAllUserNames")]
+        [Authorize(Roles = StaticUserRoles.ADMIN)]
         public async Task<IActionResult> GetAllUsersNames()
         {
             var users = await _authService.GetAllUserNamesAsync();
@@ -117,6 +117,68 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         {
             var users = await _authService.RemoveUserAsync(updatePermissionDto);
             return Ok(users);
+        }
+
+        /// <summary>
+        /// Activate user email with activation token
+        /// </summary>
+        /// <param name="token">Email activation token</param>
+        /// <returns>Activation result</returns>
+        [HttpGet]
+        [Route("activate")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(AuthServiceResponseDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> ActivateEmail([FromQuery] string token)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(token))
+                {
+                    return BadRequest(new { message = "Activation token is required" });
+                }
+
+                var result = await _authService.ActivateEmailAsync(token);
+
+                if (result.IsSucceed)
+                    return Ok(result);
+                else
+                    return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred during email activation", details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Resend activation email to user
+        /// </summary>
+        /// <param name="resendDto">Resend activation email data</param>
+        /// <returns>Operation result</returns>
+        [HttpPost]
+        [Route("resend-activation")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(AuthServiceResponseDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> ResendActivationEmail([FromBody] ResendActivationDto resendDto)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var result = await _authService.ResendActivationEmailAsync(resendDto.Email);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while resending activation email", details = ex.Message });
+            }
         }
     }
 }

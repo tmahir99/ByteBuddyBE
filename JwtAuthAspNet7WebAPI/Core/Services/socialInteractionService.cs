@@ -1,47 +1,73 @@
-﻿using JwtAuthAspNet7WebAPI.Core.DbContext;
+using JwtAuthAspNet7WebAPI.Core.DbContext;
 using JwtAuthAspNet7WebAPI.Core.Dtos;
-using JwtAuthAspNet7WebAPI.Core.Dtos.JwtAuthAspNet7WebAPI.Core.Dtos;
 using JwtAuthAspNet7WebAPI.Core.Entities;
 using JwtAuthAspNet7WebAPI.Core.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace JwtAuthAspNet7WebAPI.Core.Services
 {
     public class SocialInteractionService : ISocialInteractionService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<SocialInteractionService> _logger;
 
-        public SocialInteractionService(ApplicationDbContext context)
+        public SocialInteractionService(ApplicationDbContext context, ILogger<SocialInteractionService> logger)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<LikeDto> ToggleLikeAsync(string userId, long codeSnippetId)
         {
-            var existingLike = await _context.Likes
-                .FirstOrDefaultAsync(l => l.UserId == userId && l.CodeSnippetId == codeSnippetId);
-
-            if (existingLike != null)
+            try
             {
-                // Unlike
-                _context.Likes.Remove(existingLike);
-                await _context.SaveChangesAsync();
-                return null;
-            }
-            else
-            {
-                // Like
-                var like = new Like
+                if (string.IsNullOrWhiteSpace(userId))
                 {
-                    UserId = userId,
-                    CodeSnippetId = codeSnippetId,
-                    CreatedAt = DateTime.UtcNow
-                };
+                    _logger.LogWarning("ToggleLikeAsync called with null or empty userId");
+                    throw new ArgumentException("User ID cannot be null or empty", nameof(userId));
+                }
 
-                _context.Likes.Add(like);
-                await _context.SaveChangesAsync();
+                if (codeSnippetId <= 0)
+                {
+                    _logger.LogWarning("ToggleLikeAsync called with invalid codeSnippetId: {CodeSnippetId}", codeSnippetId);
+                    throw new ArgumentException("Code snippet ID must be greater than 0", nameof(codeSnippetId));
+                }
 
-                return await MapLikeToDtoAsync(like);
+                _logger.LogInformation("Toggling like for user {UserId} on code snippet {CodeSnippetId}", userId, codeSnippetId);
+
+                var existingLike = await _context.Likes
+                    .FirstOrDefaultAsync(l => l.UserId == userId && l.CodeSnippetId == codeSnippetId);
+
+                if (existingLike != null)
+                {
+                    // Unlike
+                    _context.Likes.Remove(existingLike);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Like removed for user {UserId} on code snippet {CodeSnippetId}", userId, codeSnippetId);
+                    return null;
+                }
+                else
+                {
+                    // Like
+                    var like = new Like
+                    {
+                        UserId = userId,
+                        CodeSnippetId = codeSnippetId,
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    _context.Likes.Add(like);
+                    await _context.SaveChangesAsync();
+                    _logger.LogInformation("Like added for user {UserId} on code snippet {CodeSnippetId}", userId, codeSnippetId);
+
+                    return await MapLikeToDtoAsync(like);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error toggling like for user {UserId} on code snippet {CodeSnippetId}", userId, codeSnippetId);
+                throw;
             }
         }
 
