@@ -292,6 +292,13 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                 query = query.Where(cs => cs.CreatedById == filter.CreatedById);
             }
 
+            // Add username filter
+            if (!string.IsNullOrWhiteSpace(filter.UserName))
+            {
+                var userNameLower = filter.UserName.ToLower();
+                query = query.Where(cs => cs.CreatedBy.UserName.ToLower().Contains(userNameLower));
+            }
+
             query = ApplySorting(query, filter.SortBy);
 
             return query;

@@ -108,10 +108,10 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         /// <returns>Paginated list of pages</returns>
         [HttpGet]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(PaginatedResult<PageDto>), 200)]
+        [ProducesResponseType(typeof(JwtAuthAspNet7WebAPI.Core.Dtos.PaginatedResult<PageDto>), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
-        public async Task<ActionResult<PaginatedResult<PageDto>>> GetAllPages(
+        public async Task<ActionResult<JwtAuthAspNet7WebAPI.Core.Dtos.PaginatedResult<PageDto>>> GetAllPages(
             [FromQuery] string searchTerm = null,
             [FromQuery] string createdById = null,
             [FromQuery] DateTime? createdAfter = null,

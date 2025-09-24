@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JwtAuthAspNet7WebAPI.Core.Dtos
 {
+    /// <summary>
+    /// Data transfer object for a tag.
+    /// </summary>
     public class TagDto
     {
         public long Id { get; set; }

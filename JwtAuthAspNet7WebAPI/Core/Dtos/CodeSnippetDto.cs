@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JwtAuthAspNet7WebAPI.Core.Dtos
 {
+    /// <summary>
+    /// Data transfer object for a code snippet.
+    /// </summary>
     public class CodeSnippetDto
     {
         public long Id { get; set; }
@@ -48,6 +51,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Dtos
         public string? SearchTerm { get; set; }
         public string? ProgrammingLanguage { get; set; }
         public string? CreatedById { get; set; }
+        public string? UserName { get; set; } // Add this property for username search
         public string? SortBy { get; set; }
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 10;

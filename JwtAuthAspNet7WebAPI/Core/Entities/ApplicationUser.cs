@@ -33,12 +33,12 @@ namespace JwtAuthAspNet7WebAPI.Core.Entities
         public bool IsEmailConfirmed { get; set; } = false;
         
         [StringLength(500)]
-        public string EmailConfirmationToken { get; set; }
+        public string? EmailConfirmationToken { get; set; }
         
         public DateTime? EmailConfirmationTokenExpiry { get; set; }
         
         [StringLength(500)]
-        public string PasswordResetToken { get; set; }
+        public string? PasswordResetToken { get; set; }
         
         public DateTime? PasswordResetTokenExpiry { get; set; }
         

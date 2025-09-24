@@ -1,0 +1,10 @@
+version: "2"
+authtoken: 306dRuYOMorckvQFTIY7A0tDaMe_847hpjhz3YpVoRAEt8s3Y
+
+tunnels:
+  api1:
+    addr: https://localhost:5078
+    proto: http
+  api2:
+    addr: https://localhost:7082
+    proto: http

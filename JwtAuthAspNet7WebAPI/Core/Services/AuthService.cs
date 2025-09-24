@@ -176,21 +176,39 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
         public async Task<AuthServiceResponseDto> MakeUserAsync(UpdatePermissionDto updatePermissionDto)
         {
             try
+            {
+                if (updatePermissionDto == null)
+                {
+                    _logger.LogWarning("MakeUser attempt with null updatePermissionDto");
+                    throw new ArgumentNullException(nameof(updatePermissionDto));
+                }
 
-            if (user is null)
+                var user = await _userManager.FindByNameAsync(updatePermissionDto.UserName);
+
+                if (user is null)
+                    return new AuthServiceResponseDto()
+                    {
+                        IsSucceed = false,
+                        Message = "Invalid User name!!!!!!!!"
+                    };
+
+                await _userManager.AddToRoleAsync(user, StaticUserRoles.USER);
+
+                return new AuthServiceResponseDto()
+                {
+                    IsSucceed = true,
+                    Message = $"Guest {user.UserName} is now a User"
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error making user a User: {UserName}", updatePermissionDto?.UserName);
                 return new AuthServiceResponseDto()
                 {
                     IsSucceed = false,
-                    Message = "Invalid User name!!!!!!!!"
+                    Message = "An error occurred while assigning user role"
                 };
-
-            await _userManager.AddToRoleAsync(user, StaticUserRoles.USER);
-
-            return new AuthServiceResponseDto()
-            {
-                IsSucceed = true,
-                Message = "Guest " + user + " is now an User"
-            };
+            }
         }
 
         public async Task<AuthServiceResponseDto> RegisterAsync(RegisterDto registerDto)

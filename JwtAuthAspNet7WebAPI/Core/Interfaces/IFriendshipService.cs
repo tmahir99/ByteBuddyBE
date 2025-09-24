@@ -1,5 +1,4 @@
-﻿using JwtAuthAspNet7WebAPI.Core.Dtos.JwtAuthAspNet7WebAPI.Core.Dtos;
-using JwtAuthAspNet7WebAPI.Core.Dtos;
+﻿using JwtAuthAspNet7WebAPI.Core.Dtos;
 
 namespace JwtAuthAspNet7WebAPI.Core.Interfaces
 {

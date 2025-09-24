@@ -94,7 +94,6 @@ namespace JwtAuthAspNet7WebAPI.Controllers
 
         [HttpGet]
         [Route("GetAllUserNames")]
-        [Authorize(Roles = StaticUserRoles.ADMIN)]
         public async Task<IActionResult> GetAllUsersNames()
         {
             var users = await _authService.GetAllUserNamesAsync();
@@ -179,6 +178,40 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             {
                 return StatusCode(500, new { message = "An error occurred while resending activation email", details = ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Get all users with full information (public endpoint)
+        /// </summary>
+        /// <returns>List of all users with full info</returns>
+        [HttpGet("all-public")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(List<ApplicationUserDto>), 200)]
+        public async Task<IActionResult> GetAllUsersPublic()
+        {
+            var users = await _authService.GetAllUsersAsync();
+            return Ok(users);
+        }
+
+        /// <summary>
+        /// Get a user's full information by username or id (public endpoint)
+        /// </summary>
+        /// <param name="user">Username or user id</param>
+        /// <returns>User info</returns>
+        [HttpGet("public-user")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(ApplicationUserDto), 200)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetPublicUser([FromQuery] string user)
+        {
+            if (string.IsNullOrWhiteSpace(user))
+                return BadRequest(new { message = "Username or user id is required" });
+
+            var users = await _authService.GetAllUsersAsync();
+            var foundUser = users.FirstOrDefault(u => u.UserName == user || u.Id == user);
+            if (foundUser == null)
+                return NotFound(new { message = "User not found" });
+            return Ok(foundUser);
         }
     }
 }

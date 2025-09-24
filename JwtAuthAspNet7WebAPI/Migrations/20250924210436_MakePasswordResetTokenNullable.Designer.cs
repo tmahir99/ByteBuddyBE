@@ -4,6 +4,7 @@ using JwtAuthAspNet7WebAPI.Core.DbContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JwtAuthAspNet7WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250924210436_MakePasswordResetTokenNullable")]
+    partial class MakePasswordResetTokenNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,6 +73,7 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("EmailConfirmationToken")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -118,6 +122,7 @@ namespace JwtAuthAspNet7WebAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordResetToken")
+                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 

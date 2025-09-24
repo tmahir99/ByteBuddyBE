@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JwtAuthAspNet7WebAPI.Core.Dtos
 {
+    /// <summary>
+    /// Data transfer object for a page.
+    /// </summary>
     public class PageDto
     {
         public long Id { get; set; }
@@ -59,5 +62,16 @@ namespace JwtAuthAspNet7WebAPI.Core.Dtos
         public string SortBy { get; set; } = "latest"; // latest, popular, title
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 10;
+    }
+
+    public class PaginatedResult<T>
+    {
+        public List<T> Items { get; set; }
+        public int TotalCount { get; set; }
+        public int PageSize { get; set; }
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public bool HasPreviousPage => CurrentPage > 1;
+        public bool HasNextPage => CurrentPage < TotalPages;
     }
 }

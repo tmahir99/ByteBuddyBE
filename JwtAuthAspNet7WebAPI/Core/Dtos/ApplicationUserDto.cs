@@ -2,6 +2,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JwtAuthAspNet7WebAPI.Core.Dtos
 {
+    /// <summary>
+    /// Data transfer object for application user information.
+    /// </summary>
     public class ApplicationUserDto
     {
         public string Id { get; set; }

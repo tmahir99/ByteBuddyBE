@@ -154,7 +154,7 @@ builder.Services.AddSwaggerGen(options =>
     options.DocInclusionPredicate((name, api) => true);
 
     // Custom operation filters for better documentation
-    options.EnableAnnotations();
+    // options.EnableAnnotations(); // Commented out because method does not exist in Swashbuckle.AspNetCore 6.4.0
 });
 
 // pipeline
