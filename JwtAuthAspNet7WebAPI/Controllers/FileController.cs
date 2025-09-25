@@ -28,8 +28,7 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         /// <param name="codeSnippetId">Code snippet ID</param>
         /// <returns>Upload result</returns>
         [HttpPost]
-        [Route("upload")]
-        [Authorize(Roles = StaticUserRoles.USER)]
+        [Route("upload/snippet")]
         [ProducesResponseType(typeof(FileUploadResponseDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -87,7 +86,6 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         /// <returns>Delete result</returns>
         [HttpDelete]
         [Route("delete/{codeSnippetId}")]
-        [Authorize(Roles = StaticUserRoles.USER)]
         [ProducesResponseType(typeof(FileUploadResponseDto), 200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -140,7 +138,6 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         /// <returns>File information</returns>
         [HttpGet]
         [Route("info/{codeSnippetId}")]
-        [Authorize(Roles = StaticUserRoles.USER)]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -173,7 +170,6 @@ namespace JwtAuthAspNet7WebAPI.Controllers
         /// <returns>File download</returns>
         [HttpGet]
         [Route("download/{codeSnippetId}")]
-        [Authorize(Roles = StaticUserRoles.USER)]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
@@ -196,6 +192,57 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             {
                 _logger.LogError(ex, "Error downloading file for CodeSnippet {CodeSnippetId}", codeSnippetId);
                 return StatusCode(500, new { message = "An error occurred during file download", details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Upload a file or image independently (not tied to a code snippet)
+        /// </summary>
+        /// <param name="file">File to upload</param>
+        /// <returns>Upload result</returns>
+        [HttpPost]
+        [Route("upload")]
+        [ProducesResponseType(typeof(FileUploadResponseDto), 200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> UploadFileIndependent([FromForm] IFormFile file)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    _logger.LogWarning("Upload attempted with null or empty file");
+                    return BadRequest(new { message = "No file provided" });
+                }
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userId))
+                {
+                    _logger.LogWarning("Upload attempted without valid user ID");
+                    return Unauthorized(new { message = "User not authenticated" });
+                }
+
+                _logger.LogInformation("File upload requested by user {UserId}", userId);
+
+                var result = await _fileService.UploadFileAsync(file, userId);
+
+                if (result.IsSucceed)
+                {
+                    _logger.LogInformation("File uploaded successfully: {FileName}", result.FileName);
+                    return Ok(result);
+                }
+                else
+                {
+                    _logger.LogWarning("File upload failed: {Message}", result.Message);
+                    return BadRequest(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during file upload");
+                return StatusCode(500, new { message = "An error occurred during file upload", details = ex.Message });
             }
         }
     }

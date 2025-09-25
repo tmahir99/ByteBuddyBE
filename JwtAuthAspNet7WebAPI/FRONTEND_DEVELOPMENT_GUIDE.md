@@ -227,7 +227,7 @@ Authorization: Bearer <token>
 
 ### File Controller (`/api/file`)
 
-#### Upload File/Image for Code Snippet
+#### Upload File/Image (Independent, not tied to code snippet)
 ```http
 POST /api/file/upload
 Authorization: Bearer <token>
@@ -235,11 +235,30 @@ Content-Type: multipart/form-data
 
 Form Data:
 - file: (binary file)
+```
+- **Response:**
+```json
+{
+  "fileId": 123,
+  "isSucceed": true,
+  "message": "File uploaded successfully",
+  "fileUrl": "/uploads/files/filename.ext",
+  "fileName": "unique_filename.ext",
+  "fileSize": 12345,
+  "contentType": "image/jpeg"
+}
+```
+
+#### Upload File/Image for Code Snippet (Legacy)
+```http
+POST /api/file/upload/snippet
+Authorization: Bearer <token>
+Content-Type: multipart/form-data
+
+Form Data:
+- file: (binary file)
 - codeSnippetId: (number)
 ```
-- **Supported File Types:**
-  - Images: .jpg, .jpeg, .png, .gif, .bmp, .webp (Max: 5MB, max 4096x4096px)
-  - Code/Text: .txt, .md, .json, .xml, .csv, .log, .sql, .js, .ts, .html, .css, .py, .cs, .java, .cpp, .c, .h, .php, .rb, .go, .rs, .kt, .swift, .yml, .yaml (Max: 10MB)
 - **Response:**
 ```json
 {
@@ -252,23 +271,30 @@ Form Data:
 }
 ```
 
-#### Delete File
+#### Delete File (Legacy, by codeSnippetId)
 ```http
 DELETE /api/file/delete/{codeSnippetId}
 Authorization: Bearer <token>
 ```
 
-#### Get File Info
+#### Get File Info (Legacy, by codeSnippetId)
 ```http
 GET /api/file/info/{codeSnippetId}
 Authorization: Bearer <token>
 ```
 
-#### Download File
+#### Download File (Legacy, by codeSnippetId)
 ```http
 GET /api/file/download/{codeSnippetId}
 Authorization: Bearer <token>
 ```
+
+---
+
+- New file uploads are independent and return a unique fileId.
+- Legacy endpoints for code snippet file uploads are still supported for backward compatibility.
+- Use `/api/file/upload` for independent file uploads (e.g., for posts, avatars, etc).
+- Use `/api/file/upload/snippet` for code snippet file uploads.
 
 ## 🔍 Advanced Search
 

@@ -16,6 +16,7 @@ namespace JwtAuthAspNet7WebAPI.Core.DbContext
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<UserTag> UserTags { get; set; }
+        public DbSet<FileEntity> Files { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -81,6 +82,8 @@ namespace JwtAuthAspNet7WebAPI.Core.DbContext
                 .WithMany()
                 .HasForeignKey(ut => ut.CodeSnippetId)
                 .OnDelete(DeleteBehavior.Restrict); // Changed from Cascade to Restrict
+
+            modelBuilder.Entity<FileEntity>().ToTable("Files");
         }
 
     }

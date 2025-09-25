@@ -146,6 +146,93 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             }
         }
 
+        public async Task<FileUploadResponseDto> UploadFileAsync(IFormFile file, string userId)
+        {
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    _logger.LogWarning("Upload attempted with null or empty file");
+                    return new FileUploadResponseDto
+                    {
+                        IsSucceed = false,
+                        Message = "No file provided"
+                    };
+                }
+
+                _logger.LogInformation("Starting independent file upload by user {UserId}", userId);
+
+                var validationResult = await ValidateFileAsync(file);
+                if (!validationResult)
+                {
+                    return new FileUploadResponseDto
+                    {
+                        IsSucceed = false,
+                        Message = "File validation failed"
+                    };
+                }
+
+                var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+                var uniqueFileName = $"{Guid.NewGuid()}{fileExtension}";
+                var uploadsFolder = Path.Combine(_environment.WebRootPath ?? _environment.ContentRootPath, "uploads", "files");
+                Directory.CreateDirectory(uploadsFolder);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                }
+
+                FileUploadResponseDto processResult = null;
+                if (IsImageFile(file.FileName))
+                {
+                    processResult = await ProcessImageAsync(file, filePath);
+                    if (!processResult.IsSucceed)
+                    {
+                        if (File.Exists(filePath))
+                            File.Delete(filePath);
+                        return processResult;
+                    }
+                }
+
+                var fileUrl = $"/uploads/files/{uniqueFileName}";
+
+                // Save file entity to DB
+                var fileEntity = new FileEntity
+                {
+                    FileName = uniqueFileName,
+                    FileUrl = fileUrl,
+                    FileSize = file.Length,
+                    ContentType = file.ContentType,
+                    UploadedById = userId
+                };
+                _context.Files.Add(fileEntity);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("File uploaded successfully: {FileName}", uniqueFileName);
+
+                return new FileUploadResponseDto
+                {
+                    FileId = fileEntity.FileId,
+                    IsSucceed = true,
+                    Message = "File uploaded successfully",
+                    FileUrl = fileUrl,
+                    FileName = uniqueFileName,
+                    FileSize = file.Length,
+                    ContentType = file.ContentType
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error uploading file");
+                return new FileUploadResponseDto
+                {
+                    IsSucceed = false,
+                    Message = "An error occurred while uploading the file"
+                };
+            }
+        }
+
         public async Task<FileUploadResponseDto> DeleteFileAsync(long codeSnippetId, string userId)
         {
             try
