@@ -1,4 +1,5 @@
 using JwtAuthAspNet7WebAPI.Core.Dtos;
+using JwtAuthAspNet7WebAPI.Core.Entities;
 
 namespace JwtAuthAspNet7WebAPI.Core.Interfaces
 {
@@ -13,5 +14,6 @@ namespace JwtAuthAspNet7WebAPI.Core.Interfaces
         string GetContentType(string fileName);
         bool IsImageFile(string fileName);
         Task<FileUploadResponseDto> ProcessImageAsync(IFormFile file, string filePath);
+        Task<FileEntity> GetFileEntityByIdAsync(long fileId);
     }
 }

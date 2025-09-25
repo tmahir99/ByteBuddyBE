@@ -25,6 +25,11 @@ namespace JwtAuthAspNet7WebAPI.Core.Entities
         [ForeignKey("CreatedById")]
         public virtual ApplicationUser CreatedBy { get; set; }
         
+        public long? FileId { get; set; } // Nullable: link to uploaded file
+        [ForeignKey("FileId")]
+        public virtual FileEntity File { get; set; } // Navigation property
+        public string FileUrl => File?.FileUrl; // Convenience property
+        
         // Navigation Properties
         public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
     }

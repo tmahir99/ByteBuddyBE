@@ -6,8 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using JwtAuthAspNet7WebAPI.Core.DbContext;
-using System.Drawing;
-using System.Drawing.Imaging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace JwtAuthAspNet7WebAPI.Core.Services
 {
@@ -314,15 +314,13 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     return false;
                 }
 
-                // Additional validation for images
+                // Additional validation for images (cross-platform)
                 if (isImage)
                 {
                     try
                     {
                         using var stream = file.OpenReadStream();
-                        using var image = Image.FromStream(stream);
-                        
-                        // Check image dimensions (max 4K resolution)
+                        using var image = await Image.LoadAsync<Rgba32>(stream);
                         if (image.Width > 4096 || image.Height > 4096)
                         {
                             _logger.LogWarning("Image validation failed: dimensions {Width}x{Height} exceed limit", image.Width, image.Height);
@@ -391,12 +389,10 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
             {
                 _logger.LogInformation("Processing image: {FileName}", file.FileName);
 
-                // Basic image processing - could be extended with resizing, optimization, etc.
+                // Cross-platform image validation
                 using var stream = file.OpenReadStream();
-                using var image = Image.FromStream(stream);
-
-                // Validate image format
-                if (!IsValidImageFormat(image))
+                using var image = await Image.LoadAsync<Rgba32>(stream);
+                if (image == null)
                 {
                     return new FileUploadResponseDto
                     {
@@ -404,12 +400,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                         Message = "Invalid or corrupted image format"
                     };
                 }
-
-                // Optional: Create thumbnail or resize if needed
-                // This is a placeholder for future image processing features
-                
+                // Optionally: resize, optimize, etc.
                 _logger.LogInformation("Image processed successfully: {FileName}", file.FileName);
-                
                 return new FileUploadResponseDto
                 {
                     IsSucceed = true,
@@ -424,27 +416,6 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     IsSucceed = false,
                     Message = "Failed to process image"
                 };
-            }
-        }
-
-        private bool IsValidImageFormat(Image image)
-        {
-            try
-            {
-                // Check if image format is supported
-                var supportedFormats = new[]
-                {
-                    ImageFormat.Jpeg,
-                    ImageFormat.Png,
-                    ImageFormat.Gif,
-                    ImageFormat.Bmp
-                };
-
-                return supportedFormats.Any(format => image.RawFormat.Equals(format));
-            }
-            catch
-            {
-                return false;
             }
         }
 
@@ -469,6 +440,11 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                 _logger.LogError(ex, "Error deleting existing file: {FileUrl}", fileUrl);
                 // Don't throw - this shouldn't prevent new file upload
             }
+        }
+
+        public async Task<FileEntity> GetFileEntityByIdAsync(long fileId)
+        {
+            return await _context.Files.FirstOrDefaultAsync(f => f.FileId == fileId);
         }
     }
 }

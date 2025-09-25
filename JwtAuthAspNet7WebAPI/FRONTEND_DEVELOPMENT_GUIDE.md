@@ -249,6 +249,28 @@ Form Data:
 }
 ```
 
+#### Get/Download File/Image by fileId
+```http
+GET /api/file/{fileId}
+```
+- **Response:**
+  - Returns the file/image binary stream.
+  - For images, you can use the URL `/api/file/{fileId}` directly in an `<img>` tag or as a download link.
+
+**Frontend Usage Example:**
+```typescript
+// To display an uploaded image:
+<img [src]="apiBaseUrl + '/file/' + fileId" alt="Uploaded image" />
+
+// To download a file:
+<a [href]="apiBaseUrl + '/file/' + fileId" download>Download</a>
+```
+
+**Explanation:**
+- After uploading a file, use the returned `fileId` to fetch or display the file/image.
+- The endpoint `/api/file/{fileId}` works for any file type (image, text, etc).
+- No authentication required for download (unless you want to restrict access).
+
 #### Upload File/Image for Code Snippet (Legacy)
 ```http
 POST /api/file/upload/snippet
@@ -292,6 +314,7 @@ Authorization: Bearer <token>
 ---
 
 - New file uploads are independent and return a unique fileId.
+- Use `/api/file/{fileId}` to fetch or display the uploaded file/image.
 - Legacy endpoints for code snippet file uploads are still supported for backward compatibility.
 - Use `/api/file/upload` for independent file uploads (e.g., for posts, avatars, etc).
 - Use `/api/file/upload/snippet` for code snippet file uploads.
@@ -582,3 +605,31 @@ export class AuthService {
 ---
 
 This guide is up-to-date with the latest backend changes and should be sufficient for FE development without blocking or misunderstanding. If you need more details, check the Swagger UI or contact the backend team.
+
+### Linking Images/Files to Pages
+
+- Each page can now have an associated image or file, referenced by `FileId` and `FileUrl`.
+- To link an uploaded file/image to a page, set the `FileId` property when creating or updating a page.
+- The `FileUrl` property in the page DTO provides the direct URL for displaying or downloading the file/image.
+
+**Frontend Usage Example:**
+```typescript
+// After uploading a file and getting fileId
+const fileId = uploadResponse.fileId;
+
+// When creating/updating a page, include fileId:
+const pagePayload = {
+  title: 'My Page',
+  description: 'Page with image',
+  fileId: fileId // link the image/file
+};
+
+// To display the image on the page:
+<img [src]="apiBaseUrl + '/file/' + page.fileId" alt="Page image" />
+```
+
+**Explanation:**
+- Upload the file/image first, get the `fileId` from the response.
+- Pass the `fileId` when creating or updating a page.
+- Use `/api/file/{fileId}` to display or download the image/file for the page.
+- The page DTO will include both `fileId` and `fileUrl` for easy access.

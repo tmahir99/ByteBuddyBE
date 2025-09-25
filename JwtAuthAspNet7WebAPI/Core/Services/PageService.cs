@@ -86,6 +86,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                 var page = await _context.Pages
                     .Include(p => p.CreatedBy)
                     .Include(p => p.Likes)
+                    .Include(p => p.File)
                     .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (page == null)
@@ -94,7 +95,28 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     throw new KeyNotFoundException($"Page with ID {id} not found");
                 }
 
-                return MapToDto(page, currentUserId);
+                var dto = new PageDto
+                {
+                    Id = page.Id,
+                    Title = page.Title,
+                    Description = page.Description,
+                    CreatedAt = page.CreatedAt,
+                    CreatedById = page.CreatedById,
+                    CreatedBy = new ApplicationUserDto
+                    {
+                        Id = page.CreatedBy.Id,
+                        UserName = page.CreatedBy.UserName,
+                        FirstName = page.CreatedBy.FirstName,
+                        LastName = page.CreatedBy.LastName,
+                        Email = page.CreatedBy.Email
+                    },
+                    LikesCount = page.Likes?.Count ?? 0,
+                    IsLikedByCurrentUser = page.Likes?.Any(l => l.UserId == currentUserId) ?? false,
+                    FileId = page.FileId,
+                    FileUrl = page.File?.FileUrl
+                };
+
+                return dto;
             }
             catch (Exception ex)
             {
@@ -444,7 +466,9 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     Email = page.CreatedBy.Email
                 },
                 LikesCount = page.Likes.Count,
-                IsLikedByCurrentUser = isLikedByCurrentUser
+                IsLikedByCurrentUser = isLikedByCurrentUser,
+                FileId = page.FileId,
+                FileUrl = page.File?.FileUrl
             };
         }
     }

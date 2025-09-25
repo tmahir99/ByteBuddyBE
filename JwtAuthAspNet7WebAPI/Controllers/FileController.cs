@@ -14,11 +14,13 @@ namespace JwtAuthAspNet7WebAPI.Controllers
     {
         private readonly IFileService _fileService;
         private readonly ILogger<FileController> _logger;
+        private readonly IWebHostEnvironment _environment;
 
-        public FileController(IFileService fileService, ILogger<FileController> logger)
+        public FileController(IFileService fileService, ILogger<FileController> logger, IWebHostEnvironment environment)
         {
             _fileService = fileService ?? throw new ArgumentNullException(nameof(fileService));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         /// <summary>
@@ -243,6 +245,39 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             {
                 _logger.LogError(ex, "Error during file upload");
                 return StatusCode(500, new { message = "An error occurred during file upload", details = ex.Message });
+            }
+        }
+
+        /// <summary>
+        /// Get/download a file or image by its unique fileId
+        /// </summary>
+        /// <param name="fileId">File ID</param>
+        /// <returns>File binary stream</returns>
+        [HttpGet("{fileId}")]
+        [AllowAnonymous]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public async Task<IActionResult> GetFileById(long fileId)
+        {
+            try
+            {
+                var fileEntity = await _fileService.GetFileEntityByIdAsync(fileId);
+                if (fileEntity == null)
+                    return NotFound(new { message = "File not found" });
+
+                var filePath = Path.Combine(_environment.WebRootPath ?? _environment.ContentRootPath, "uploads", "files", fileEntity.FileName);
+                if (!System.IO.File.Exists(filePath))
+                    return NotFound(new { message = "File not found on disk" });
+
+                var contentType = fileEntity.ContentType ?? "application/octet-stream";
+                var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                return File(stream, contentType, fileEntity.FileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving file by id {FileId}", fileId);
+                return StatusCode(500, new { message = "An error occurred while retrieving the file", details = ex.Message });
             }
         }
     }

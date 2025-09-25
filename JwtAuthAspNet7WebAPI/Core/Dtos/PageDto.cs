@@ -25,6 +25,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Dtos
         public int LikesCount { get; set; }
         
         public bool IsLikedByCurrentUser { get; set; }
+        public long? FileId { get; set; } // New: link to uploaded file
+        public string FileUrl { get; set; } // New: file/image URL for FE
     }
 
     public class CreatePageDto
