@@ -40,6 +40,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Dtos
         
         [Required]
         public string CreatedById { get; set; }
+        public long? FileId { get; set; } // Fix: allow linking file/image on create
     }
 
     public class UpdatePageDto
@@ -53,6 +54,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Dtos
         
         [Required]
         public string CreatedById { get; set; }
+        public long? FileId { get; set; } // Fix: allow updating linked file/image
     }
 
     public class PageFilterDto

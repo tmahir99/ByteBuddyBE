@@ -10,6 +10,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Interfaces
         Task BlockUserAsync(string userId, string blockedUserId);
         Task<List<FriendshipDto>> GetFriendRequestsAsync(string userId);
         Task<List<ApplicationUserDto>> GetFriendsAsync(string userId);
+        Task<FriendshipDto> GetFriendshipStatusAsync(string userId, string otherUserIdOrUserName);
     }
 
 }

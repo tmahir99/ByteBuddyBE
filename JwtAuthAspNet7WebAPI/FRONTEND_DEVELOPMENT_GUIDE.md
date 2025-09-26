@@ -461,6 +461,56 @@ GET /api/friendships/pending/{userId}
 Authorization: Bearer <token>
 ```
 
+## Friendship API: Check Request Status
+
+### Check if a friend request exists between you and another user
+
+**Endpoint:**
+```
+GET /api/friendships/request-status/{otherUser}
+```
+- `{otherUser}` can be a username or userId.
+- Returns the friendship status (Pending, Accepted, Declined, Blocked, or NotFound) between the current user and the specified user.
+- Requires authentication (JWT).
+
+**Example Request:**
+```
+GET /api/friendships/request-status/tmahir00
+Authorization: Bearer <your-jwt-token>
+```
+
+**Example Response:**
+```
+200 OK
+{
+  "requesterId": "...",
+  "requesterName": "neko99",
+  "addresseeId": "...",
+  "addresseeName": "tmahir00",
+  "status": "Pending",
+  "createdAt": "2024-06-01T12:34:56Z"
+}
+```
+If no friendship exists:
+```
+404 NotFound
+{
+  "status": "NotFound"
+}
+```
+
+## Other Friendship Endpoints
+- Send request: `POST /api/friendships/send-request/{addresseeId}`
+- Accept request: `POST /api/friendships/accept-request/{requesterId}`
+- Decline request: `POST /api/friendships/decline-request/{requesterId}`
+- Get requests: `GET /api/friendships/requests`
+- Get friends: `GET /api/friendships/friends`
+
+All endpoints accept either username or userId for user parameters.
+
+---
+For more details, see the Swagger UI at `/swagger` when running the backend in development mode.
+
 ### Social Interactions Controller (`/api/socialinteractions`)
 
 #### Get Comments for Code Snippet

@@ -55,7 +55,8 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
                     Title = dto.Title.Trim(),
                     Description = dto.Description?.Trim(),
                     CreatedAt = DateTime.UtcNow,
-                    CreatedById = dto.CreatedById
+                    CreatedById = dto.CreatedById,
+                    FileId = dto.FileId // Fix: set FileId from DTO
                 };
 
                 _context.Pages.Add(page);
@@ -200,6 +201,7 @@ namespace JwtAuthAspNet7WebAPI.Core.Services
 
                 page.Title = dto.Title.Trim();
                 page.Description = dto.Description?.Trim();
+                page.FileId = dto.FileId; // Fix: update FileId from DTO
 
                 await _context.SaveChangesAsync();
                 _logger.LogInformation("Page updated successfully with ID: {Id}", id);

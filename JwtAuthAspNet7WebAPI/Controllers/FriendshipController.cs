@@ -95,5 +95,17 @@ namespace JwtAuthAspNet7WebAPI.Controllers
             var friends = await _friendshipService.GetFriendsAsync(userId);
             return Ok(friends);
         }
+
+        [HttpGet("request-status/{otherUser}")]
+        [ProducesResponseType(typeof(FriendshipDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<FriendshipDto>> GetFriendshipStatus(string otherUser)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var status = await _friendshipService.GetFriendshipStatusAsync(userId, otherUser);
+            if (status == null)
+                return NotFound(new { status = "NotFound" });
+            return Ok(status);
+        }
     }
 }

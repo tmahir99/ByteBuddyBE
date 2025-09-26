@@ -60,7 +60,7 @@ builder.Services
     .AddJwtBearer(options =>
     {
         options.SaveToken = true;
-        options.RequireHttpsMetadata= false;
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters()
         {
             ValidateIssuer = true,
@@ -68,6 +68,19 @@ builder.Services
             ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
             ValidAudience = builder.Configuration["JWT:ValidAudience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
+        };
+        // Handle JWT auth for WebSocket/SignalR if needed
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+                if (!string.IsNullOrEmpty(accessToken))
+                {
+                    context.Token = accessToken;
+                }
+                return Task.CompletedTask;
+            }
         };
     });
 
@@ -92,6 +105,19 @@ builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<ISearchService, SearchService>();
 
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+// Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.SetIsOriginAllowed(_ => true)  // Allow any origin in development
+               .AllowAnyMethod()
+               .AllowAnyHeader()
+               .AllowCredentials();
+    });
+});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -160,15 +186,10 @@ builder.Services.AddSwaggerGen(options =>
 // pipeline
 var app = builder.Build();
 
-app.UseCors(options =>
-{
-    options.WithOrigins("http://localhost:4200")
-           .AllowAnyHeader()
-           .AllowAnyMethod()
-           .AllowCredentials();
-});
+// CORS must be first, before any other middleware
+app.UseCors();
 
-
+// Configure the HTTP request pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -176,13 +197,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-// Enable static file serving for uploads
 app.UseStaticFiles();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
